@@ -3,30 +3,25 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Character.h"
 #include "AbilitySystemInterface.h"
-#include "B9CharacterBase.generated.h"
+#include "GameFramework/PlayerState.h"
+#include "B9PlayerState.generated.h"
 
 class UAbilitySystemComponent;
 class UAttributeSet;
-
-UCLASS(Abstract)
-//添加abstract使该类不可被拖入关卡；
-class ABANDON_API AB9CharacterBase : public ACharacter , public IAbilitySystemInterface
+/**
+ * 
+ */
+UCLASS()
+class ABANDON_API AB9PlayerState : public APlayerState , public IAbilitySystemInterface
 {
 	GENERATED_BODY()
-
+	AB9PlayerState();
 public:
-	AB9CharacterBase();
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 	UAttributeSet* GetAttributeSet() const{return AttributeSet;}
 	
 protected:
-	virtual void BeginPlay() override;
-
-	UPROPERTY(EditAnywhere, Category = "Combat" )
-	TObjectPtr<USkeletalMeshComponent> Weapon;
-
 	UPROPERTY()
 	TObjectPtr<UAbilitySystemComponent> AbilitySystemComponent;
 	UPROPERTY()

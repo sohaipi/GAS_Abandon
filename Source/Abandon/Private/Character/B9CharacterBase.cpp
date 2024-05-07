@@ -11,7 +11,12 @@ AB9CharacterBase::AB9CharacterBase()
 	Weapon->SetupAttachment(GetMesh(),FName("WeaponHandSocket"));
 	Weapon->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 }
- 
+
+UAbilitySystemComponent* AB9CharacterBase::GetAbilitySystemComponent() const
+{
+	return AbilitySystemComponent;
+}
+
 void AB9CharacterBase::BeginPlay()
 {
 	Super::BeginPlay();

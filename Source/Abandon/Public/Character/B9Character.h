@@ -13,5 +13,12 @@ UCLASS()
 class ABANDON_API AB9Character : public AB9CharacterBase
 {
 	GENERATED_BODY()
-	
+
+public:
+	AB9Character();
+	virtual void PossessedBy(AController* NewController) override;
+	virtual void OnRep_PlayerState() override;
+
+private:
+	void InitAbilityActorInfo();
 };
