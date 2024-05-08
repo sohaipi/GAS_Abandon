@@ -20,6 +20,7 @@ AB9Enemy::AB9Enemy()
 
 void AB9Enemy::BeginPlay()
 {
+	//由于挂在PAWN上，所以只需简单得在beginplay上做ASC的初始化；
 	Super::BeginPlay();
 
 	AbilitySystemComponent->InitAbilityActorInfo(this,this);

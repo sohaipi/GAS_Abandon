@@ -27,6 +27,7 @@ void AB9Character::OnRep_PlayerState()
 	InitAbilityActorInfo();
 }
 
+//初始化的具体操作
 void AB9Character::InitAbilityActorInfo()
 {
 	AB9PlayerState* B9PlayerState = GetPlayerState<AB9PlayerState>();
