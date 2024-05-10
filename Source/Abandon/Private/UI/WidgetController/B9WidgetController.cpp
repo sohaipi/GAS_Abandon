@@ -10,3 +10,11 @@ void UB9WidgetController::SetWidgetControllerParams(const FWidgetControllerParam
 	AbilitySystemComponent = WCParams.AbilitySystemComponent;
 	AttributeSet = WCParams.AttributeSet;
 }
+
+void UB9WidgetController::BroadcastInitValues()
+{
+}
+
+void UB9WidgetController::BindCallbacksToDependencies()
+{
+}

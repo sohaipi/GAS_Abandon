@@ -6,6 +6,9 @@
 #include "GameFramework/HUD.h"
 #include "B9HUD.generated.h"
 
+
+class UAbilitySystemComponent;
+class UAttributeSet;
 struct FWidgetControllerParams;
 class UB9OverlayWidgetController;
 class UB9UserWidget;
@@ -23,9 +26,11 @@ public:
 
 	//初始化用于显示的HUD组件
 	UB9OverlayWidgetController* GetOverlayWidgetController(const FWidgetControllerParams& WCParams);
+
+	void InitOverlay(APlayerController* PC,APlayerState* PS,UAbilitySystemComponent* ASC,UAttributeSet* AS);
 	
 protected:
-	virtual void BeginPlay() override;
+
 	
 private:
 	UPROPERTY(EditAnywhere)

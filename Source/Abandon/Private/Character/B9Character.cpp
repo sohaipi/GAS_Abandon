@@ -4,7 +4,9 @@
 #include "Character/B9Character.h"
 
 #include "AbilitySystemComponent.h"
+#include "Player/B9PlayerController.h"
 #include "Player/B9PlayerState.h"
+#include "UI/HUD/B9HUD.h"
 
 AB9Character::AB9Character()
 {
@@ -17,6 +19,8 @@ void AB9Character::PossessedBy(AController* NewController)
 
 	//init ability actor info for the server 服务器上初始化GAS对象
 	InitAbilityActorInfo();
+
+	SetOwner(NewController);
 }
 
 void AB9Character::OnRep_PlayerState()
@@ -35,4 +39,14 @@ void AB9Character::InitAbilityActorInfo()
 	B9PlayerState->GetAbilitySystemComponent()->InitAbilityActorInfo(B9PlayerState,this);
 	AbilitySystemComponent = B9PlayerState->GetAbilitySystemComponent();
 	AttributeSet = B9PlayerState->GetAttributeSet();
+
+	if (AB9PlayerController* PlayerController =  Cast<AB9PlayerController>(GetController()))
+	{
+		if (AB9HUD* B9HUD = Cast<AB9HUD>(PlayerController->GetHUD())) 
+		{
+			B9HUD->InitOverlay(PlayerController,B9PlayerState,AbilitySystemComponent,AttributeSet);
+		}
+	}
+	
+	
 }

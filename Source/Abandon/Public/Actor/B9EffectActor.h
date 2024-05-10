@@ -7,6 +7,8 @@
 #include "GameFramework/Actor.h"
 #include "B9EffectActor.generated.h"
 
+class UGameplayEffect;
+
 UCLASS()
 class ABANDON_API AB9EffectActor : public AActor
 {
@@ -14,18 +16,28 @@ class ABANDON_API AB9EffectActor : public AActor
 	
 public:	
 	AB9EffectActor();
+
 	
-	UFUNCTION()
+	//DEBUG用重叠事件。
+	/*UFUNCTION()
 	void OnOverlap(UPrimitiveComponent* OverlappedComponent,AActor* OtherActor,UPrimitiveComponent* OtherComp,int32 OtherBodyIndex,bool FromSweep,const FHitResult& SweepResult);
 
 	UFUNCTION()
-	void OnEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
+	void OnEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);*/
 protected:
 	virtual void BeginPlay() override;
 
+	UFUNCTION(BlueprintCallable)
+	void ApplyEffectToTarget(AActor* TargetActor,TSubclassOf<UGameplayEffect> GameplayEffectClass);
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly,Category = "Effects")
+	TSubclassOf<UGameplayEffect> InstantGameplayEffectClass;
+
 private:
-	UPROPERTY(VisibleAnywhere)
+
+	//测试用；
+	/*UPROPERTY(VisibleAnywhere)
 	TObjectPtr<USphereComponent> Sphere;
 	UPROPERTY(VisibleAnywhere)
-	TObjectPtr<UStaticMeshComponent> StaticMesh;
+	TObjectPtr<UStaticMeshComponent> StaticMesh;*/
 };

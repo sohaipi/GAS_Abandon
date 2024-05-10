@@ -4,6 +4,7 @@
 #include "UI/HUD/B9HUD.h"
 
 #include "Blueprint/UserWidget.h"
+#include "UI/Widget/B9UserWidget.h"
 #include "UI/WidgetController/B9OverlayWidgetController.h"
 
 UB9OverlayWidgetController* AB9HUD::GetOverlayWidgetController(const FWidgetControllerParams& WCParams)
@@ -12,16 +13,29 @@ UB9OverlayWidgetController* AB9HUD::GetOverlayWidgetController(const FWidgetCont
 	{
 		OverlayWidgetController = NewObject<UB9OverlayWidgetController>(this,OverlayWidgetControllerClass);
 		OverlayWidgetController->SetWidgetControllerParams(WCParams);
+		OverlayWidgetController->BindCallbacksToDependencies();
 
 		return OverlayWidgetController;
 	}
 	return OverlayWidgetController;
 }
 
-void AB9HUD::BeginPlay()
+void AB9HUD::InitOverlay(APlayerController* PC, APlayerState* PS, UAbilitySystemComponent* ASC, UAttributeSet* AS)
 {
-	Super::BeginPlay();
-
+	checkf(OverlayWidgetControllerClass,TEXT("OverlayWidgetControllerClass MISS, ERROR"));
+	checkf(OverlayWidgetClass,TEXT("OverlayWidgetClass MISS,ERROR"));
+	
 	UUserWidget* Widget = CreateWidget<UUserWidget>(GetWorld(),OverlayWidgetClass);
+	OverlayWidget = Cast<UB9UserWidget>(Widget);
+		
+	const FWidgetControllerParams WidgetControllerParams(PC,PS,ASC,AS);
+	UB9OverlayWidgetController* WidgetController =  GetOverlayWidgetController(WidgetControllerParams);
+	
+	
+	OverlayWidget->SetWidgetController(WidgetController);
+	WidgetController->BroadcastInitValues();
+	
 	Widget->AddToViewport();
 }
+
+

@@ -51,6 +51,10 @@ class ABANDON_API UB9WidgetController : public UObject
 public:
 	UFUNCTION(BlueprintCallable)
 	void SetWidgetControllerParams( const FWidgetControllerParams& WCParams);
+	virtual void BroadcastInitValues();
+	//用于属性值更新时进行回调。
+	virtual void BindCallbacksToDependencies();
+protected:
 
 	//放结构体中
 	UPROPERTY(BlueprintReadOnly, Category = "WidgetController")

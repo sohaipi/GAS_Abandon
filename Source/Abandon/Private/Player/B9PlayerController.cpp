@@ -17,8 +17,10 @@ void AB9PlayerController::BeginPlay()
 	check(B9Context);
 
 	UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(GetLocalPlayer());
-	check(Subsystem);
-	Subsystem->AddMappingContext(B9Context, 3);
+	if (Subsystem)
+	{
+		Subsystem->AddMappingContext(B9Context, 3);
+	}
 	
 	bShowMouseCursor = true;
 	DefaultMouseCursor = EMouseCursor::Default;
