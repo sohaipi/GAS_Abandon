@@ -58,8 +58,16 @@ void AB9EffectActor::BeginPlay()
 	Sphere->OnComponentEndOverlap.AddDynamic(this,&AB9EffectActor::OnEndOverlap);*/
 }
 
+//一并封装对effect的应用与移除的预处理
 void AB9EffectActor::ApplyEffectToTarget(AActor* TargetActor, TSubclassOf<UGameplayEffect> GameplayEffectClass)
 {
+	//需实现接口的声明版本
+	/*IAbilitySystemInterface* ASCInterface = Cast<IAbilitySystemInterface>(Target);
+	if (ASCInterface)
+	{
+		ASCInterface->GetAbilitySystemComponent();
+	}*/
+	
 	//库函数检查ACTOR是否拥有ASC，没有则返回nullptr，不需接口实现。
 	UAbilitySystemComponent* TargetASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(TargetActor);
 	if (TargetASC == nullptr) return;
@@ -68,15 +76,69 @@ void AB9EffectActor::ApplyEffectToTarget(AActor* TargetActor, TSubclassOf<UGamep
 	FGameplayEffectContextHandle EffectContextHandle =  TargetASC->MakeEffectContext();
 	EffectContextHandle.AddSourceObject(this);
 	
-	FGameplayEffectSpecHandle EffectSpecHandle =  TargetASC->MakeOutgoingSpec(GameplayEffectClass, 1.0f,EffectContextHandle) ;
-	//通过*将get到的原始指针转换为引用。
-	TargetASC->ApplyGameplayEffectSpecToSelf(*EffectSpecHandle.Data.Get());
-	
-	//需实现接口的版本
-	/*IAbilitySystemInterface* ASCInterface = Cast<IAbilitySystemInterface>(Target);
-	if (ASCInterface)
+	const FGameplayEffectSpecHandle EffectSpecHandle =  TargetASC->MakeOutgoingSpec(GameplayEffectClass, 1.0f,EffectContextHandle);
+	//通过*将get到的原始指针转换为引用。保存在数组以供移除。
+	const FActiveGameplayEffectHandle ActiveEffectHandle= TargetASC->ApplyGameplayEffectSpecToSelf(*EffectSpecHandle.Data.Get());
+
+	//~
+	const bool bIsInfinite =  EffectSpecHandle.Data.Get()->Def.Get()->DurationPolicy == EGameplayEffectDurationType::Infinite;
+	if (bIsInfinite && InfiniteEffectRemovePolicy == EEffectRemovePolicy::RemoveOnEndOverlap)
 	{
-		ASCInterface->GetAbilitySystemComponent();
-	}*/
+		ActiveEffectHandles.Add(ActiveEffectHandle,TargetASC);
+	}
+}
+
+void AB9EffectActor::OnOverlap(AActor* TargetActor)
+{
+	if (InstantEffectApplicationPolicy == EEffectApplicationPolicy::ApplyOnOverlap)
+	{
+		ApplyEffectToTarget(TargetActor,InstantGameplayEffectClass);
+	}
+	if (DurationEffectApplicationPolicy == EEffectApplicationPolicy::ApplyOnOverlap)
+	{
+		ApplyEffectToTarget(TargetActor,DurationGameplayEffectClass);
+	}
+	if ((InfiniteEffectApplicationPolicy == EEffectApplicationPolicy::ApplyOnOverlap))
+	{
+		ApplyEffectToTarget(TargetActor,InfiniteGameplayEffectClass);
+	}
+}
+
+void AB9EffectActor::OnEndOverlap(AActor* TargetActor)
+{
+	if (InstantEffectApplicationPolicy == EEffectApplicationPolicy::ApplyOnEndOverlap)
+	{
+		ApplyEffectToTarget(TargetActor,InstantGameplayEffectClass);
+	}
+	if (DurationEffectApplicationPolicy == EEffectApplicationPolicy::ApplyOnEndOverlap)
+	{
+		ApplyEffectToTarget(TargetActor,DurationGameplayEffectClass);
+	}
+	if (InfiniteEffectApplicationPolicy == EEffectApplicationPolicy::ApplyOnEndOverlap)
+	{
+		ApplyEffectToTarget(TargetActor,InfiniteGameplayEffectClass);
+	}
+	//因为只有这种效果会有移除的需要，所以直接写在里面移除。
+	if (InfiniteEffectRemovePolicy == EEffectRemovePolicy::RemoveOnEndOverlap)
+	{
+		UAbilitySystemComponent* TargetASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(TargetActor);
+		if (!IsValid(TargetASC)) return;
+
+		//不能在循环中删除MAP中的元素，用数组暂存起来。
+		TArray<FActiveGameplayEffectHandle> HandlsToRemove;
+		for (TTuple<FActiveGameplayEffectHandle, UAbilitySystemComponent*> HandlePair:ActiveEffectHandles)
+		{
+			if(TargetASC == HandlePair.Value)
+			{
+				//实际移除Effect
+				TargetASC->RemoveActiveGameplayEffect(HandlePair.Key,1.f);
+				HandlsToRemove.Add(HandlePair.Key);
+			}
+		}
+		for(auto& Handle:HandlsToRemove)
+		{
+			ActiveEffectHandles.FindAndRemoveChecked(Handle);
+		}
+	}
 }
 

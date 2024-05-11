@@ -8,7 +8,7 @@
 UB9AttributeSet::UB9AttributeSet()
 {
 	InitHealth(250.f);
-	InitMana(100.f);
+	InitMana(10.f);
 	InitMaxHealth(300.f);
 	InitMaxMana(200.f);
 }
