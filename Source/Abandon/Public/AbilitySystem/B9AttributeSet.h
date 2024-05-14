@@ -13,6 +13,47 @@
 	GAMEPLAYATTRIBUTE_VALUE_GETTER(PropertyName) \
 	GAMEPLAYATTRIBUTE_VALUE_SETTER(PropertyName) \
 	GAMEPLAYATTRIBUTE_VALUE_INITTER(PropertyName)
+
+//Ctl H替换
+
+USTRUCT()
+struct FEffectSourceProperties
+{
+	GENERATED_BODY()
+
+	FEffectSourceProperties(){}
+
+	FGameplayEffectContextHandle EffectContextHandle;
+	
+	UPROPERTY()
+	UAbilitySystemComponent* SourceASC = nullptr;
+	UPROPERTY()
+	AActor* SourceAvatarActor = nullptr;
+	UPROPERTY()
+	AController* SourceController = nullptr;
+	UPROPERTY()
+	ACharacter* SourceCharacter = nullptr;
+
+	UPROPERTY()
+	UAbilitySystemComponent* TargetASC = nullptr;
+	UPROPERTY()
+	AActor* TargetAvatarActor = nullptr;
+	UPROPERTY()
+	AController* TargetController = nullptr;
+	UPROPERTY()
+	ACharacter* TargetCharacter = nullptr;
+
+	
+	/*
+	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	TObjectPtr<UAbilitySystemComponent> TargetASC = nullptr;
+	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	TObjectPtr<AActor> TargetAvatarActor = nullptr;
+	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	TObjectPtr<AController> TargetController = nullptr;
+	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	TObjectPtr<ACharacter> TargetCharacter = nullptr;*/
+};
 /**
  * 
  */
@@ -25,9 +66,13 @@ public:
 	UB9AttributeSet();
 	//Step3 通知具体复制内容的函数~
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+	virtual void PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue) override;
+	/*virtual void PostAttributeChange(const FGameplayAttribute& Attribute, float OldValue, float NewValue) override;*/
+	virtual void PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data) override;
+	
 	
 	//构造新属性的样板步骤boilerplate；
-	//Step1 声明。同时发起OnRep函数。
+	//Step1 声明。同时发起OnRep函数。底下的宏用于引入属性库？
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_Health, Category = "Vital Attributes")
 	FGameplayAttributeData Health;
 	ATTRIBUTE_ACCESSORS(UB9AttributeSet,Health);
@@ -44,6 +89,8 @@ public:
 	FGameplayAttributeData MaxMana;
 	ATTRIBUTE_ACCESSORS(UB9AttributeSet,MaxMana);
 
+	UPROPERTY()
+	FEffectSourceProperties EffectSourceProperties;
 	//使用 （const a& b） 的引用声明，使频繁被调用时，降低开销。 使用 a() const,保证不能修改所属类的非静态成员变量。
 	//Step2 通知函数
 	UFUNCTION()
@@ -55,4 +102,6 @@ public:
 	void OnRep_MaxHealth(const FGameplayAttributeData& OldMaxHealth) const;
 	UFUNCTION()
 	void OnRep_MaxMana(const FGameplayAttributeData& OldMaxMana) const;
+
+	void SetEffectProperties(const FGameplayEffectModCallbackData& Data,FEffectSourceProperties Props);
 };

@@ -23,7 +23,7 @@ void AB9Enemy::BeginPlay()
 	//由于挂在PAWN上，所以只需简单得在beginplay上做ASC的初始化；
 	Super::BeginPlay();
 
-	AbilitySystemComponent->InitAbilityActorInfo(this,this);
+	InitAbilityActorInfo();
 }
 
 void AB9Enemy::HighlightActor()
@@ -38,4 +38,10 @@ void AB9Enemy::UnHighlightActor()
 {
 	GetMesh()->SetRenderCustomDepth(false);
 	Weapon->SetRenderCustomDepth(false);
+}
+
+void AB9Enemy::InitAbilityActorInfo()
+{
+	AbilitySystemComponent->InitAbilityActorInfo(this,this);
+	Cast<UB9AbilitySystemComponent>(AbilitySystemComponent)->AbilityActorInfoSet();
 }

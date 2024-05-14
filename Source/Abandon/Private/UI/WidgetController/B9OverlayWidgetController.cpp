@@ -3,6 +3,7 @@
 
 #include "UI/WidgetController/B9OverlayWidgetController.h"
 
+#include "AbilitySystem/B9AbilitySystemComponent.h"
 #include "AbilitySystem/B9AttributeSet.h"
 
 void UB9OverlayWidgetController::BroadcastInitValues()
@@ -28,6 +29,18 @@ void UB9OverlayWidgetController::BindCallbacksToDependencies()
 	B9AttributeSet->GetManaAttribute()).AddUObject(this, &UB9OverlayWidgetController::ManaChanged);
 	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(
 		B9AttributeSet->GetMaxManaAttribute()).AddUObject(this, &UB9OverlayWidgetController::MaxManaChanged);
+
+	//lambda的使用。由多播激活函数体。[capture list] (parameter list) -> return type { function body }
+	Cast<UB9AbilitySystemComponent>(AbilitySystemComponent)->EffectAssetTags.AddLambda(
+		[](const FGameplayTagContainer& AssetTags)
+		{
+			for (FGameplayTag Tag:AssetTags)
+			{
+				const FString Msg = FString::Printf(TEXT("GE Tag: %s"),*Tag.ToString());
+				GEngine->AddOnScreenDebugMessage(-1,8.f, FColor::Blue, FString(Msg));
+			}
+		}
+		);
 }
 
 //广播数值变化

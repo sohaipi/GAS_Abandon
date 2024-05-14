@@ -22,4 +22,7 @@ public:
 
 	UPROPERTY(BlueprintReadOnly)
 	bool bHighlight=false;
+
+protected:
+	virtual void InitAbilityActorInfo() override;
 };

@@ -4,6 +4,7 @@
 #include "Character/B9Character.h"
 
 #include "AbilitySystemComponent.h"
+#include "AbilitySystem/B9AbilitySystemComponent.h"
 #include "Player/B9PlayerController.h"
 #include "Player/B9PlayerState.h"
 #include "UI/HUD/B9HUD.h"
@@ -31,12 +32,15 @@ void AB9Character::OnRep_PlayerState()
 	InitAbilityActorInfo();
 }
 
-//初始化的具体操作
+//初始化的具体操作, OwnerActor是PlayerState, AvatarActor是英雄的Character类
 void AB9Character::InitAbilityActorInfo()
 {
 	AB9PlayerState* B9PlayerState = GetPlayerState<AB9PlayerState>();
 	check(B9PlayerState);
 	B9PlayerState->GetAbilitySystemComponent()->InitAbilityActorInfo(B9PlayerState,this);
+
+	Cast<UB9AbilitySystemComponent>(B9PlayerState->GetAbilitySystemComponent())->AbilityActorInfoSet();
+	
 	AbilitySystemComponent = B9PlayerState->GetAbilitySystemComponent();
 	AttributeSet = B9PlayerState->GetAttributeSet();
 

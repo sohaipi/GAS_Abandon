@@ -31,4 +31,7 @@ protected:
 	TObjectPtr<UAbilitySystemComponent> AbilitySystemComponent;
 	UPROPERTY()
 	TObjectPtr<UAttributeSet> AttributeSet;
+
+	//提升到base使多播委托的绑定在此函数中执行。
+	virtual void InitAbilityActorInfo();
 };

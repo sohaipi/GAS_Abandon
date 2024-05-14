@@ -53,6 +53,9 @@ protected:
 	
 	//句柄与ASC的对应，用于存储需要移除的Effect
 	TMap<FActiveGameplayEffectHandle,UAbilitySystemComponent*> ActiveEffectHandles;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly,Category = "Effects")
+	float ActorLevel=1.0;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly,Category = "Effects")
 	TSubclassOf<UGameplayEffect> InstantGameplayEffectClass;

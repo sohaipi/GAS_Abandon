@@ -10,7 +10,11 @@
 class UAbilitySystemComponent;
 class UAttributeSet;
 /**
- * 
+ * GASNote:OwnerActor需要继承并实现IAbilitySystemInterface,
+ * 如果AvatarActor和OwnerActor是不同的Actor,
+ * 那么AvatarActor也应该继承并实现IAbilitySystemInterface.
+ * 该接口有一个必须重写的函数, UAbilitySystemComponent* GetAbilitySystemComponent() const,
+ * 其返回一个指向ASC的指针, ASC通过寻找该接口函数来和系统内部进行交互.
  */
 UCLASS()
 class ABANDON_API AB9PlayerState : public APlayerState , public IAbilitySystemInterface

@@ -23,3 +23,7 @@ void AB9CharacterBase::BeginPlay()
 	
 }
 
+void AB9CharacterBase::InitAbilityActorInfo()
+{
+}
+
