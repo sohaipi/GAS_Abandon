@@ -28,7 +28,7 @@ void UB9AttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutL
 	DOREPLIFETIME_CONDITION_NOTIFY(UB9AttributeSet,MaxMana,COND_None,REPNOTIFY_Always);
 }
 
-//Pre之后，数值仍可能被更改，不能以最终值看待。
+//Pre之后，数值仍可能被更改，不能以最终值看待。对修饰符将导致的结果进行限制。
 void UB9AttributeSet::PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue)
 {
 	Super::PreAttributeChange(Attribute, NewValue);
@@ -86,6 +86,16 @@ void UB9AttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallback
 	
 	FEffectSourceProperties Props;
 	SetEffectProperties(Data,Props);
+
+	//最终限制住属性数值。
+	if (Data.EvaluatedData.Attribute == GetHealthAttribute())
+	{
+		SetHealth(FMath::Clamp(GetHealth(),0.f,GetMaxHealth()));
+	}
+	if (Data.EvaluatedData.Attribute == GetManaAttribute())
+	{
+		SetMana(FMath::Clamp(GetMana(),0.f,GetMaxMana()));
+	}
 }
 
 void UB9AttributeSet::OnRep_Health(const FGameplayAttributeData& OldHealth) const

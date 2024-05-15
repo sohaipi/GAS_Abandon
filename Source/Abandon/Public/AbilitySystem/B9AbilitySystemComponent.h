@@ -9,7 +9,7 @@
 DECLARE_MULTICAST_DELEGATE_OneParam(FEffectAssetTags,const FGameplayTagContainer& /*Asset Tags*/)
 /**
  * 
- */
+*/	
 UCLASS()
 class ABANDON_API UB9AbilitySystemComponent : public UAbilitySystemComponent
 {
