@@ -32,6 +32,9 @@ protected:
 	UPROPERTY()
 	TObjectPtr<UAttributeSet> AttributeSet;
 
+	TSubclassOf<UGameplayEffect> DefaultPrimaryAttributes;
 	//提升到base使多播委托的绑定在此函数中执行。
 	virtual void InitAbilityActorInfo();
+
+	void InitPrimaryAttribute();
 };

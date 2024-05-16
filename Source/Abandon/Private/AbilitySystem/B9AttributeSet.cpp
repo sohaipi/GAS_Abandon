@@ -21,11 +21,15 @@ UB9AttributeSet::UB9AttributeSet()
 void UB9AttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+	DOREPLIFETIME_CONDITION_NOTIFY(UB9AttributeSet,Strength,COND_None,REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UB9AttributeSet,Intelligence,COND_None,REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UB9AttributeSet,Resilience,COND_None,REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UB9AttributeSet,Strength,COND_None,REPNOTIFY_Always);
 
 	DOREPLIFETIME_CONDITION_NOTIFY(UB9AttributeSet,Health,COND_None,REPNOTIFY_Always);
 	DOREPLIFETIME_CONDITION_NOTIFY(UB9AttributeSet,MaxHealth,COND_None,REPNOTIFY_Always);
 	DOREPLIFETIME_CONDITION_NOTIFY(UB9AttributeSet,Mana,COND_None,REPNOTIFY_Always);
-	DOREPLIFETIME_CONDITION_NOTIFY(UB9AttributeSet,MaxMana,COND_None,REPNOTIFY_Always);
+
 }
 
 //Pre之后，数值仍可能被更改，不能以最终值看待。对修饰符将导致的结果进行限制。
@@ -96,6 +100,26 @@ void UB9AttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallback
 	{
 		SetMana(FMath::Clamp(GetMana(),0.f,GetMaxMana()));
 	}
+}
+
+void UB9AttributeSet::OnRep_Strength(const FGameplayAttributeData& OldStrength) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UB9AttributeSet,Strength,OldStrength);
+}
+
+void UB9AttributeSet::OnRep_Intelligence(const FGameplayAttributeData& OldIntelligence) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UB9AttributeSet,Intelligence,OldIntelligence);
+}
+
+void UB9AttributeSet::OnRep_Resilience(const FGameplayAttributeData& OldResilience) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UB9AttributeSet,Resilience,OldResilience);
+}
+
+void UB9AttributeSet::OnRep_Vigor(const FGameplayAttributeData& OldVigor) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UB9AttributeSet,Vigor,OldVigor);
 }
 
 void UB9AttributeSet::OnRep_Health(const FGameplayAttributeData& OldHealth) const

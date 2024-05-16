@@ -3,6 +3,8 @@
 
 #include "Character/B9CharacterBase.h"
 
+#include "AbilitySystemComponent.h"
+
 AB9CharacterBase::AB9CharacterBase()
 {
 	PrimaryActorTick.bCanEverTick = false;
@@ -25,5 +27,15 @@ void AB9CharacterBase::BeginPlay()
 
 void AB9CharacterBase::InitAbilityActorInfo()
 {
+}
+
+void AB9CharacterBase::InitPrimaryAttribute()
+{
+	
+	const FGameplayEffectContextHandle EffectContextHandle = GetAbilitySystemComponent()->MakeEffectContext();
+	const FGameplayEffectSpecHandle SpecHandle = GetAbilitySystemComponent()->MakeOutgoingSpec(
+	 	DefaultPrimaryAttributes,1.f,EffectContextHandle);
+	/*GetAbilitySystemComponent()->ApplyGameplayEffectToTarget(*SpecHandle.Data.Get(),GetAbilitySystemComponent());
+	GetAbilitySystemComponent()->ApplyGameplayEffectSpecToTarget()*/
 }
 
