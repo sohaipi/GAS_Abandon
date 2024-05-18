@@ -18,7 +18,16 @@ AB9PlayerState::AB9PlayerState()
 	NetUpdateFrequency = 100.f;
 }
 
+void AB9PlayerState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+}
+
 UAbilitySystemComponent* AB9PlayerState::GetAbilitySystemComponent() const
 {
 	return AbilitySystemComponent;
+}
+
+void AB9PlayerState::OnRep_Level(int OldLevel)
+{
 }

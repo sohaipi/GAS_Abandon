@@ -73,6 +73,9 @@ public:
 	
 	//构造新属性的样板步骤boilerplate；
 	//Step1 声明。同时发起OnRep函数。底下的宏用于引入属性库？
+	/*
+	 * Primary Attributes
+	 */
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_Strength, Category = "Primary Attributes")
 	FGameplayAttributeData Strength;
 	ATTRIBUTE_ACCESSORS(UB9AttributeSet,Strength);
@@ -85,7 +88,10 @@ public:
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_Vigor, Category = "Primary Attributes")
 	FGameplayAttributeData Vigor;
 	ATTRIBUTE_ACCESSORS(UB9AttributeSet,Vigor);
-	
+
+	/*
+	* Vital Attributes
+	*/
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_Health, Category = "Vital Attributes")
 	FGameplayAttributeData Health;
 	ATTRIBUTE_ACCESSORS(UB9AttributeSet,Health);
@@ -94,15 +100,40 @@ public:
 	FGameplayAttributeData Mana;
 	ATTRIBUTE_ACCESSORS(UB9AttributeSet,Mana);
 
-	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_MaxHealth, Category = "Vital Attributes")
+	/*
+	* Secondary Attributes
+	*/
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_MaxHealth, Category = "Secondary Attributes")
 	FGameplayAttributeData MaxHealth;
 	ATTRIBUTE_ACCESSORS(UB9AttributeSet,MaxHealth);
-	
-	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_MaxMana, Category = "Vital Attributes")
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_MaxMana, Category = "Secondary Attributes")
 	FGameplayAttributeData MaxMana;
 	ATTRIBUTE_ACCESSORS(UB9AttributeSet,MaxMana);
-
-
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_Armor, Category = "Secondary Attributes")
+	FGameplayAttributeData Armor; //Reduces damage taken, improves Block Chance
+	ATTRIBUTE_ACCESSORS(UB9AttributeSet,Armor);
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_ArmorPenetration, Category = "Secondary Attributes")
+	FGameplayAttributeData ArmorPenetration; //Ignores percentage of enemy Armor, increases Crit Hit Chance
+	ATTRIBUTE_ACCESSORS(UB9AttributeSet,ArmorPenetration);
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_BlockChance, Category = "Secondary Attributes")
+	FGameplayAttributeData BlockChance;//Chance to cut incoming damage in half
+	ATTRIBUTE_ACCESSORS(UB9AttributeSet,BlockChance);
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_CriticalHitChance, Category = "Secondary Attributes")
+	FGameplayAttributeData CriticalHitChance;//Chance to double damage plus critical hit bonus
+	ATTRIBUTE_ACCESSORS(UB9AttributeSet,CriticalHitChance);
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_CriticalHitDamage, Category = "Secondary Attributes")
+	FGameplayAttributeData CriticalHitDamage;//Bonus damage added when a critical hit is scored
+	ATTRIBUTE_ACCESSORS(UB9AttributeSet,CriticalHitDamage);
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_CriticalHitResistance, Category = "Secondary Attributes")
+	FGameplayAttributeData CriticalHitResistance;//Reduces critical hit chance of attacking enemies
+	ATTRIBUTE_ACCESSORS(UB9AttributeSet,CriticalHitResistance);
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_HealthRegeneration, Category = "Secondary Attributes")
+	FGameplayAttributeData HealthRegeneration;//Amount of Health regenerated every 1 second
+	ATTRIBUTE_ACCESSORS(UB9AttributeSet,HealthRegeneration);
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_ManaRegeneration, Category = "Secondary Attributes")
+	FGameplayAttributeData ManaRegeneration;//Amount of Mana regenerated every 1 second
+	ATTRIBUTE_ACCESSORS(UB9AttributeSet,ManaRegeneration);
+	
 
 	UPROPERTY()
 	FEffectSourceProperties EffectSourceProperties;
@@ -126,6 +157,23 @@ public:
 	void OnRep_MaxHealth(const FGameplayAttributeData& OldMaxHealth) const;
 	UFUNCTION()
 	void OnRep_MaxMana(const FGameplayAttributeData& OldMaxMana) const;
+	UFUNCTION()
+	void OnRep_Armor(const FGameplayAttributeData& OldArmor) const;
+	UFUNCTION()
+	void OnRep_ArmorPenetration(const FGameplayAttributeData& OldArmorPenetration) const;
+	UFUNCTION()
+	void OnRep_BlockChance(const FGameplayAttributeData& OldBlockChance) const;
+	UFUNCTION()
+	void OnRep_CriticalHitChance(const FGameplayAttributeData& OldCriticalHitChance) const;
+	UFUNCTION()
+	void OnRep_CriticalHitDamage(const FGameplayAttributeData& OldCriticalHitDamage) const;
+	UFUNCTION()
+	void OnRep_CriticalHitResistance(const FGameplayAttributeData& OldCriticalHitResistance) const;
+	UFUNCTION()
+	void OnRep_HealthRegeneration(const FGameplayAttributeData& OldHealthRegeneration) const;
+	UFUNCTION()
+	void OnRep_ManaRegeneration(const FGameplayAttributeData& OldManaRegeneration) const;
+	
 
 	void SetEffectProperties(const FGameplayEffectModCallbackData& Data,FEffectSourceProperties Props);
 };

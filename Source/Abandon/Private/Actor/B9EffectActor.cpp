@@ -135,7 +135,7 @@ void AB9EffectActor::OnEndOverlap(AActor* TargetActor)
 				HandlsToRemove.Add(HandlePair.Key);
 			}
 		}
-		for(auto& Handle:HandlsToRemove)
+		for(FActiveGameplayEffectHandle& Handle:HandlsToRemove)
 		{
 			ActiveEffectHandles.FindAndRemoveChecked(Handle);
 		}

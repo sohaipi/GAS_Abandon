@@ -40,6 +40,11 @@ void AB9Enemy::UnHighlightActor()
 	Weapon->SetRenderCustomDepth(false);
 }
 
+int32 AB9Enemy::GetPlayerLevel()
+{
+	return Level;
+}
+
 void AB9Enemy::InitAbilityActorInfo()
 {
 	AbilitySystemComponent->InitAbilityActorInfo(this,this);

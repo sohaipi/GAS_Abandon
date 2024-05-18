@@ -29,13 +29,21 @@ void AB9CharacterBase::InitAbilityActorInfo()
 {
 }
 
-void AB9CharacterBase::InitPrimaryAttribute()
+void AB9CharacterBase::InitDefaultAttribute() const
 {
-	
-	const FGameplayEffectContextHandle EffectContextHandle = GetAbilitySystemComponent()->MakeEffectContext();
+	ApplyEffectToTarget(DefaultPrimaryAttributes,1.0);
+	ApplyEffectToTarget(DefaultSecondaryAttributes,1.0);
+	ApplyEffectToTarget(DefaultVitalAttributes,1.0);
+}
+
+void AB9CharacterBase::ApplyEffectToTarget(TSubclassOf<UGameplayEffect> DefaultAttributes, float Level) const
+{
+	check(IsValid(GetAbilitySystemComponent()));
+	check(DefaultAttributes);
+	FGameplayEffectContextHandle EffectContextHandle = GetAbilitySystemComponent()->MakeEffectContext();
+	EffectContextHandle.AddSourceObject(this);
 	const FGameplayEffectSpecHandle SpecHandle = GetAbilitySystemComponent()->MakeOutgoingSpec(
-	 	DefaultPrimaryAttributes,1.f,EffectContextHandle);
-	/*GetAbilitySystemComponent()->ApplyGameplayEffectToTarget(*SpecHandle.Data.Get(),GetAbilitySystemComponent());
-	GetAbilitySystemComponent()->ApplyGameplayEffectSpecToTarget()*/
+		 DefaultAttributes,Level,EffectContextHandle);
+	GetAbilitySystemComponent()->ApplyGameplayEffectSpecToTarget(*SpecHandle.Data.Get(),GetAbilitySystemComponent());
 }
 

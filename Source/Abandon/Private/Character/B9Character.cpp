@@ -32,6 +32,13 @@ void AB9Character::OnRep_PlayerState()
 	InitAbilityActorInfo();
 }
 
+int32 AB9Character::GetPlayerLevel()
+{
+	const AB9PlayerState* B9PlayerState = GetPlayerState<AB9PlayerState>();
+	check(B9PlayerState);
+	return B9PlayerState->GetPlayerLevel();
+}
+
 //初始化的具体操作, OwnerActor是PlayerState, AvatarActor是英雄的Character类
 void AB9Character::InitAbilityActorInfo()
 {
@@ -51,6 +58,6 @@ void AB9Character::InitAbilityActorInfo()
 			B9HUD->InitOverlay(PlayerController,B9PlayerState,AbilitySystemComponent,AttributeSet);
 		}
 	}
-	
-	
+	//只需要在服务器初始化属性，因为属性被标记为replicated;
+	InitDefaultAttribute(); 
 }
