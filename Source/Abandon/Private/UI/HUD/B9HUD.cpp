@@ -5,6 +5,7 @@
 
 #include "Blueprint/UserWidget.h"
 #include "UI/Widget/B9UserWidget.h"
+#include "UI/WidgetController/B9AttributeMenuWidgetController.h"
 #include "UI/WidgetController/B9OverlayWidgetController.h"
 
 UB9OverlayWidgetController* AB9HUD::GetOverlayWidgetController(const FWidgetControllerParams& WCParams)
@@ -14,10 +15,19 @@ UB9OverlayWidgetController* AB9HUD::GetOverlayWidgetController(const FWidgetCont
 		OverlayWidgetController = NewObject<UB9OverlayWidgetController>(this,OverlayWidgetControllerClass);
 		OverlayWidgetController->SetWidgetControllerParams(WCParams);
 		OverlayWidgetController->BindCallbacksToDependencies();
-
-		return OverlayWidgetController;
 	}
 	return OverlayWidgetController;
+}
+
+UB9AttributeMenuWidgetController* AB9HUD::GetAttributeMenuWidgetController(const FWidgetControllerParams& WCParams)
+{
+	if(AttributeMenuWidgetController == nullptr)
+	{
+		AttributeMenuWidgetController = NewObject<UB9AttributeMenuWidgetController>(this,AttributeMenuWidgetControllerClass);
+		AttributeMenuWidgetController->SetWidgetControllerParams(WCParams);
+		AttributeMenuWidgetController->BindCallbacksToDependencies();
+	}
+	return AttributeMenuWidgetController;
 }
 
 void AB9HUD::InitOverlay(APlayerController* PC, APlayerState* PS, UAbilitySystemComponent* ASC, UAttributeSet* AS)
