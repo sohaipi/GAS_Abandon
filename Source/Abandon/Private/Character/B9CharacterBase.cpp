@@ -47,3 +47,10 @@ void AB9CharacterBase::ApplyEffectToTarget(TSubclassOf<UGameplayEffect> DefaultA
 	GetAbilitySystemComponent()->ApplyGameplayEffectSpecToTarget(*SpecHandle.Data.Get(),GetAbilitySystemComponent());
 }
 
+void AB9CharacterBase::AddCharacterAbilities()
+{
+	//只允许在服务器添加
+	if (!HasAuthority()) return;
+	
+}
+

@@ -6,7 +6,7 @@
 #include "AbilitySystemComponent.h"
 #include "AttributeSet.h"
 #include "B9AttributeSet.generated.h"
-
+//Ctl H替换
 //源码定义好的宏，用于使用四个对属性操作的函数。
 #define ATTRIBUTE_ACCESSORS(ClassName, PropertyName) \
 	GAMEPLAYATTRIBUTE_PROPERTY_GETTER(ClassName, PropertyName) \
@@ -14,7 +14,11 @@
 	GAMEPLAYATTRIBUTE_VALUE_SETTER(PropertyName) \
 	GAMEPLAYATTRIBUTE_VALUE_INITTER(PropertyName)
 
-//Ctl H替换
+//用个委托，把属性的Tag与AS中返回属性的GETTER绑定起来，实现tag与属性的对应。
+//参数在前，签名在后;
+//用函数指针版本替代了。
+/*DECLARE_DELEGATE_RetVal(FGameplayAttribute,FAttributeSignature);*/
+
 
 USTRUCT()
 struct FEffectSourceProperties
@@ -54,6 +58,14 @@ struct FEffectSourceProperties
 	UPROPERTY(EditAnywhere,BlueprintReadWrite)
 	TObjectPtr<ACharacter> TargetCharacter = nullptr;*/
 };
+
+
+/*typedef TBaseStaticDelegateInstance<FGameplayAttribute(),FDefaultDelegateUserPolicy>::FFuncPtr FAttributeFuncPtr;*/
+//将函数指针定义为模板使用；
+template<class T>
+using TStaticFunPtr =typename TBaseStaticDelegateInstance<T,FDefaultDelegateUserPolicy>::FFuncPtr ;
+
+
 /**
  * 
  */
@@ -70,6 +82,12 @@ public:
 	/*virtual void PostAttributeChange(const FGameplayAttribute& Attribute, float OldValue, float NewValue) override;*/
 	virtual void PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data) override;
 	
+	//繁琐的delegate版本，用函数指针替代
+	/*TMap<FGameplayTag,FAttributeSignature> TagsToAttributes;*/
+	TMap<FGameplayTag,TStaticFunPtr<FGameplayAttribute()>> TagsToAttributes;
+
+	//用于表示一个返回FGameplayAttribute类型函数的指针，如 FunctionPtr = GetStrengthAttribute(); 
+	/*TBaseStaticDelegateInstance<FGameplayAttribute(),FDefaultDelegateUserPolicy>::FFuncPtr FunctionPtr ;*/
 	
 	//构造新属性的样板步骤boilerplate；
 	//Step1 声明。同时发起OnRep函数。底下的宏用于引入属性库？
