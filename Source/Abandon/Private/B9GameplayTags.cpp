@@ -46,4 +46,18 @@ void FB9GameplayTags::InitializeNativeGameplayTags()
 		FName("Attributes.Secondary.MaxHealth"),FString("MaxHealth"));
 	B9GameplayTags.Attribute_Secondary_MaxMana = UGameplayTagsManager::Get().AddNativeGameplayTag(
 		FName("Attributes.Secondary.MaxMana"),FString("MaxMana"));
+
+	//Input Tags
+	B9GameplayTags.InputTag_LMB = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("InputTag.LMB"),FString("InputTag:LMB"));
+	B9GameplayTags.InputTag_RMB = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("InputTag.RMB"),FString("InputTag:RMB"));
+	B9GameplayTags.InputTag_1 = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("InputTag.1"),FString("InputTag:Keyboard_1"));
+	B9GameplayTags.InputTag_2 = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("InputTag.2"),FString("InputTag:Keyboard_2"));
+	B9GameplayTags.InputTag_3 = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("InputTag.3"),FString("InputTag:Keyboard_3"));
+	B9GameplayTags.InputTag_4 = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("InputTag.4"),FString("InputTag:Keyboard_4"));
 }

@@ -19,10 +19,16 @@ public:
 	void AbilityActorInfoSet();
 
 	FEffectAssetTags EffectAssetTags;
+	void AddCharacterAbilities(const TArray<TSubclassOf<UGameplayAbility>>& StartupAbilities);
+	//响应输入用
+	void AbilityInputTagReleased(const FGameplayTag& InputTag);
+	void AbilityInputTagHeld(const FGameplayTag& InputTag);
+	
 protected:
 	//用于绑定多播委托。
 	void EffectApplied(
 		UAbilitySystemComponent* AbilitySystemComponent,
 		const FGameplayEffectSpec& GameplayEffectSpec,
 		FActiveGameplayEffectHandle ActiveGameplayEffectHandle);
+	
 };

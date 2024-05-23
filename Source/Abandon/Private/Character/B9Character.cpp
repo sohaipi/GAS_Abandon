@@ -20,7 +20,7 @@ void AB9Character::PossessedBy(AController* NewController)
 
 	//init ability actor info for the server 服务器上初始化GAS对象
 	InitAbilityActorInfo();
-
+	AddCharacterAbilities();
 	SetOwner(NewController);
 }
 

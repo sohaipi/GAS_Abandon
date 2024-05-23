@@ -2,8 +2,12 @@
 
 
 #include "Player/B9PlayerController.h"
+
+#include "AbilitySystemBlueprintLibrary.h"
 #include "EnhancedInputSubsystems.h"
-#include "EnhancedInputComponent.h"
+#include "Input/B9InputComponent.h"
+#include "GameplayTagContainer.h"
+#include "AbilitySystem/B9AbilitySystemComponent.h"
 #include "Interaction/EnemyInterface.h"
 
 AB9PlayerController::AB9PlayerController()
@@ -36,8 +40,10 @@ void AB9PlayerController::SetupInputComponent()
 {
 	Super::SetupInputComponent();
 
-	UEnhancedInputComponent* EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(InputComponent);
-	EnhancedInputComponent->BindAction(MoveAction,ETriggerEvent::Triggered,this,&AB9PlayerController::Move);
+	UB9InputComponent* B9InputComponent = CastChecked<UB9InputComponent>(InputComponent);
+	B9InputComponent->BindAction(MoveAction,ETriggerEvent::Triggered,this,&AB9PlayerController::Move);
+
+	B9InputComponent->BindAbilityActions(B9InputConfig,this,&ThisClass::AbilityInputTagPressed,&ThisClass::AbilityInputTagReleased,&ThisClass::AbilityInputTagHeld);
 }
 
 void AB9PlayerController::PlayerTick(float DeltaTime)
@@ -81,6 +87,34 @@ void AB9PlayerController::CursorTrace()
 		}
 	}
 }
+
+void AB9PlayerController::AbilityInputTagPressed(FGameplayTag InputTag)
+{
+	/*GEngine->AddOnScreenDebugMessage(1,3.F,FColor::Black,*InputTag.ToString());*/
+}
+
+void AB9PlayerController::AbilityInputTagReleased(FGameplayTag InputTag)
+{
+	if (GetASC() == nullptr) return;
+	GetASC()->AbilityInputTagReleased(InputTag);
+}
+
+void AB9PlayerController::AbilityInputTagHeld(FGameplayTag InputTag)
+{
+	if (GetASC() == nullptr) return;
+	GetASC()->AbilityInputTagHeld(InputTag);
+}
+
+UB9AbilitySystemComponent* AB9PlayerController::GetASC()
+{
+	if (B9AbilitySystemComponent == nullptr)
+	{
+		B9AbilitySystemComponent =Cast<UB9AbilitySystemComponent>
+								(UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(GetPawn<APawn>())) ;
+	}
+	return B9AbilitySystemComponent;	
+}
+	
 
 void AB9PlayerController::Move(const FInputActionValue& InputActionValue)
 {

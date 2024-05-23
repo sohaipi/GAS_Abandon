@@ -4,6 +4,7 @@
 #include "Character/B9CharacterBase.h"
 
 #include "AbilitySystemComponent.h"
+#include "AbilitySystem/B9AbilitySystemComponent.h"
 
 AB9CharacterBase::AB9CharacterBase()
 {
@@ -51,6 +52,6 @@ void AB9CharacterBase::AddCharacterAbilities()
 {
 	//只允许在服务器添加
 	if (!HasAuthority()) return;
-	
+	CastChecked<UB9AbilitySystemComponent>(AbilitySystemComponent)->AddCharacterAbilities(StartupAbilities);
 }
 
