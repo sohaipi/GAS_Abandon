@@ -8,11 +8,17 @@
 #include "Input/B9InputComponent.h"
 #include "GameplayTagContainer.h"
 #include "AbilitySystem/B9AbilitySystemComponent.h"
+#include "Components/SplineComponent.h"
+#include "B9GameplayTags.h"
+#include "NavigationPath.h"
+#include "NavigationSystem.h"
 #include "Interaction/EnemyInterface.h"
 
 AB9PlayerController::AB9PlayerController()
 {
 	bReplicates = true;
+
+	Spline = CreateDefaultSubobject<USplineComponent>("Spline");
 }
 
 void AB9PlayerController::BeginPlay()
@@ -91,18 +97,84 @@ void AB9PlayerController::CursorTrace()
 void AB9PlayerController::AbilityInputTagPressed(FGameplayTag InputTag)
 {
 	/*GEngine->AddOnScreenDebugMessage(1,3.F,FColor::Black,*InputTag.ToString());*/
+	if (InputTag.MatchesTagExact(FB9GameplayTags::Get().InputTag_LMB))
+	{
+		bTargeting = ThisActor ? true : false;
+		bAutoRunning = false;
+	}
 }
 
 void AB9PlayerController::AbilityInputTagReleased(FGameplayTag InputTag)
 {
-	if (GetASC() == nullptr) return;
-	GetASC()->AbilityInputTagReleased(InputTag);
+	if (!InputTag.MatchesTagExact(FB9GameplayTags::Get().InputTag_LMB))
+	{
+		if (GetASC())
+		{
+			GetASC()->AbilityInputTagReleased(InputTag);
+		}
+		return;
+	}
+	if (bTargeting)
+	{
+		if (GetASC())
+		{
+			GetASC()->AbilityInputTagHeld(InputTag);
+		}
+	}
+	else
+	{
+		const APawn* ControlledPawn = GetPawn();
+		if (FollowTime <= ShortPressThreshold && ControlledPawn)
+		{
+			//导航组件函数库
+			if (UNavigationPath* Path= UNavigationSystemV1::FindPathToLocationSynchronously(
+				this,ControlledPawn->GetActorLocation(),CachedDestination))
+			{
+				for (const FVector& PointLoc: Path->PathPoints)
+				{
+					Spline->AddSplinePoint(PointLoc,ESplineCoordinateSpace::World);
+					DrawDebugSphere(GetWorld(),PointLoc,20.f,8,FColor::Blue,false,50.f);
+				}
+				bAutoRunning = true;
+			}
+			bTargeting = false;
+			FollowTime = 0.f;
+		}
+	}
 }
 
 void AB9PlayerController::AbilityInputTagHeld(FGameplayTag InputTag)
 {
-	if (GetASC() == nullptr) return;
-	GetASC()->AbilityInputTagHeld(InputTag);
+	if (!InputTag.MatchesTagExact(FB9GameplayTags::Get().InputTag_LMB))
+	{
+		if (GetASC())
+		{
+			GetASC()->AbilityInputTagHeld(InputTag);
+		}
+		return;
+	}
+	if (bTargeting)
+	{
+		if (GetASC())
+		{
+			GetASC()->AbilityInputTagHeld(InputTag);
+		}
+	}
+	else
+	{
+		FollowTime += GetWorld()->GetDeltaSeconds();
+
+		FHitResult Hit;
+		if (GetHitResultUnderCursor(ECC_Visibility,false,Hit))
+		{
+			CachedDestination = Hit.ImpactPoint;
+		}
+		if (APawn* ControlledPawn = GetPawn())
+		{
+			const FVector WorldDirection = (CachedDestination - ControlledPawn->GetActorLocation()).GetSafeNormal();
+			ControlledPawn->AddMovementInput(WorldDirection);
+		}
+	}
 }
 
 UB9AbilitySystemComponent* AB9PlayerController::GetASC()
