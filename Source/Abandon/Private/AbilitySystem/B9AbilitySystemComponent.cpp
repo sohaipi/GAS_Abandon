@@ -9,7 +9,7 @@
 void UB9AbilitySystemComponent::AbilityActorInfoSet()
 {
 	//将下面的回调函数绑定在多播委托上，在instant和duration effect时调用。
-	OnGameplayEffectAppliedDelegateToSelf.AddUObject(this,&UB9AbilitySystemComponent::EffectApplied);
+	OnGameplayEffectAppliedDelegateToSelf.AddUObject(this,&UB9AbilitySystemComponent::ClientEffectApplied);
 
 	/*const FB9GameplayTags& GameplayTags = FB9GameplayTags::Get();
 	GEngine->AddOnScreenDebugMessage(
@@ -63,7 +63,7 @@ void UB9AbilitySystemComponent::AbilityInputTagHeld(const FGameplayTag& InputTag
 	}
 }
 
-void UB9AbilitySystemComponent::EffectApplied(UAbilitySystemComponent* AbilitySystemComponent,
+void UB9AbilitySystemComponent::ClientEffectApplied_Implementation(UAbilitySystemComponent* AbilitySystemComponent,
                                               const FGameplayEffectSpec& GameplayEffectSpec, FActiveGameplayEffectHandle ActiveGameplayEffectHandle)
 {
 	/*GEngine->AddOnScreenDebugMessage(1,8.f, FColor::Blue, FString("Effect Applied!"));*/

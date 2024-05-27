@@ -25,12 +25,9 @@ void AB9PlayerController::BeginPlay()
 {
 	Super::BeginPlay();
 	check(B9Context);
-
-	UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(GetLocalPlayer());
-	if (Subsystem)
-	{
+	
+	if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(GetLocalPlayer()))
 		Subsystem->AddMappingContext(B9Context, 3);
-	}
 	
 	bShowMouseCursor = true;
 	DefaultMouseCursor = EMouseCursor::Default;
@@ -57,40 +54,39 @@ void AB9PlayerController::PlayerTick(float DeltaTime)
 	Super::PlayerTick(DeltaTime);
 
 	CursorTrace();
+
+	AutoRun();
 }
+void AB9PlayerController::AutoRun()
+{
+	if (bAutoRunning == false) return;
+	if (APawn* ControlledPawn = GetPawn())
+	{
+		const FVector LocMoveTo = Spline->FindLocationClosestToWorldLocation(ControlledPawn->GetActorLocation(),ESplineCoordinateSpace::World);
+		const FVector DierMoveTo = Spline->FindDirectionClosestToWorldLocation(LocMoveTo,ESplineCoordinateSpace::World);
+		ControlledPawn->AddMovementInput(DierMoveTo);
+
+		const float DistanceToDestination = (LocMoveTo - CachedDestination).Length();
+		if (DistanceToDestination <= AutoRunAcceptanceRadius)
+		{
+			bAutoRunning = false;
+		}
+	}
+}
+
 
 void AB9PlayerController::CursorTrace()
 {
-	FHitResult CursorHit;
-	GetHitResultUnderCursor(ECC_Visibility,false,CursorHit);
+	GetHitResultUnderCursor(ECC_Visibility,false,CursorHit);	
 	if (!CursorHit.bBlockingHit) return;
 
 	LastActor = ThisActor;
 	ThisActor = Cast<IEnemyInterface>(CursorHit.GetActor());
 
-	//判断上一帧与这一帧检测所可能出现的五种不同的结果并处理之。
-
-	if (LastActor == nullptr)
+	if (LastActor != ThisActor) 
 	{
-		if (ThisActor != nullptr)
-		{
-			ThisActor->HighlightActor();
-		}
-	}
-	else
-	{
-		if (ThisActor == nullptr)
-		{
-			LastActor->UnHighlightActor();
-		}
-		else
-		{
-			if (ThisActor != LastActor)
-			{
-				LastActor->UnHighlightActor();
-				ThisActor->HighlightActor();
-			}
-		}
+		if (LastActor) LastActor->UnHighlightActor();
+		if (ThisActor) ThisActor->HighlightActor();
 	}
 }
 
@@ -108,18 +104,12 @@ void AB9PlayerController::AbilityInputTagReleased(FGameplayTag InputTag)
 {
 	if (!InputTag.MatchesTagExact(FB9GameplayTags::Get().InputTag_LMB))
 	{
-		if (GetASC())
-		{
-			GetASC()->AbilityInputTagReleased(InputTag);
-		}
+		if (GetASC()) GetASC()->AbilityInputTagReleased(InputTag);
 		return;
 	}
 	if (bTargeting)
 	{
-		if (GetASC())
-		{
-			GetASC()->AbilityInputTagHeld(InputTag);
-		}
+		if (GetASC()) GetASC()->AbilityInputTagHeld(InputTag);
 	}
 	else
 	{
@@ -135,11 +125,12 @@ void AB9PlayerController::AbilityInputTagReleased(FGameplayTag InputTag)
 					Spline->AddSplinePoint(PointLoc,ESplineCoordinateSpace::World);
 					DrawDebugSphere(GetWorld(),PointLoc,20.f,8,FColor::Blue,false,50.f);
 				}
+				CachedDestination = Path->PathPoints[Path->PathPoints.Num()-1];
 				bAutoRunning = true;
 			}
-			bTargeting = false;
-			FollowTime = 0.f;
 		}
+		bTargeting = false;
+		FollowTime = 0.f;
 	}
 }
 
@@ -148,27 +139,19 @@ void AB9PlayerController::AbilityInputTagHeld(FGameplayTag InputTag)
 	if (!InputTag.MatchesTagExact(FB9GameplayTags::Get().InputTag_LMB))
 	{
 		if (GetASC())
-		{
 			GetASC()->AbilityInputTagHeld(InputTag);
-		}
 		return;
 	}
 	if (bTargeting)
 	{
 		if (GetASC())
-		{
 			GetASC()->AbilityInputTagHeld(InputTag);
-		}
 	}
 	else
 	{
 		FollowTime += GetWorld()->GetDeltaSeconds();
-
-		FHitResult Hit;
-		if (GetHitResultUnderCursor(ECC_Visibility,false,Hit))
-		{
-			CachedDestination = Hit.ImpactPoint;
-		}
+		
+		if (CursorHit.bBlockingHit) CachedDestination = CursorHit.ImpactPoint;
 		if (APawn* ControlledPawn = GetPawn())
 		{
 			const FVector WorldDirection = (CachedDestination - ControlledPawn->GetActorLocation()).GetSafeNormal();
@@ -186,7 +169,8 @@ UB9AbilitySystemComponent* AB9PlayerController::GetASC()
 	}
 	return B9AbilitySystemComponent;	
 }
-	
+
+
 
 void AB9PlayerController::Move(const FInputActionValue& InputActionValue)
 {

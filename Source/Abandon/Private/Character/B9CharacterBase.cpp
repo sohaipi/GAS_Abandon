@@ -26,6 +26,12 @@ void AB9CharacterBase::BeginPlay()
 	
 }
 
+FVector AB9CharacterBase::GetCombatTipLocation()
+{
+	check(Weapon);
+	return Weapon->GetSocketLocation(WeaponTipSocketName);
+}
+
 void AB9CharacterBase::InitAbilityActorInfo()
 {
 }

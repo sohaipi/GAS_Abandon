@@ -26,7 +26,8 @@ public:
 	
 protected:
 	//用于绑定多播委托。
-	void EffectApplied(
+	UFUNCTION(Client,Reliable)
+	void ClientEffectApplied(
 		UAbilitySystemComponent* AbilitySystemComponent,
 		const FGameplayEffectSpec& GameplayEffectSpec,
 		FActiveGameplayEffectHandle ActiveGameplayEffectHandle);
