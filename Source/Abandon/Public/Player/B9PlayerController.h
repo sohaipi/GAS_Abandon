@@ -38,6 +38,8 @@ private:
 
 	UPROPERTY(EditAnywhere,Category="Input")
 	TObjectPtr<UInputAction> MoveAction;
+	UPROPERTY(EditAnywhere,Category="Input")
+	TObjectPtr<UInputAction> LShiftAction;
 
 	void Move(const FInputActionValue& InputActionValue);
 	void CursorTrace();
@@ -48,6 +50,10 @@ private:
 	void AbilityInputTagPressed(FGameplayTag InputTag);
 	void AbilityInputTagReleased(FGameplayTag InputTag);
 	void AbilityInputTagHeld(FGameplayTag InputTag);
+
+	void LShiftPressed() { bLShiftKeyDown = true;}; 
+	void LShiftReleased(){ bLShiftKeyDown = false;};
+	bool bLShiftKeyDown;
 	
 	UPROPERTY(EditDefaultsOnly,Category  = "Input")
 	TObjectPtr<UB9InputConfig> B9InputConfig;

@@ -45,6 +45,8 @@ void AB9PlayerController::SetupInputComponent()
 
 	UB9InputComponent* B9InputComponent = CastChecked<UB9InputComponent>(InputComponent);
 	B9InputComponent->BindAction(MoveAction,ETriggerEvent::Triggered,this,&AB9PlayerController::Move);
+	B9InputComponent->BindAction(LShiftAction,ETriggerEvent::Started,this,&AB9PlayerController::LShiftPressed);
+	B9InputComponent->BindAction(LShiftAction,ETriggerEvent::Completed,this,&AB9PlayerController::LShiftReleased);
 
 	B9InputComponent->BindAbilityActions(B9InputConfig,this,&ThisClass::AbilityInputTagPressed,&ThisClass::AbilityInputTagReleased,&ThisClass::AbilityInputTagHeld);
 }
@@ -107,11 +109,9 @@ void AB9PlayerController::AbilityInputTagReleased(FGameplayTag InputTag)
 		if (GetASC()) GetASC()->AbilityInputTagReleased(InputTag);
 		return;
 	}
-	if (bTargeting)
-	{
-		if (GetASC()) GetASC()->AbilityInputTagHeld(InputTag);
-	}
-	else
+	if (GetASC()) GetASC()->AbilityInputTagReleased(InputTag);
+	
+	if (!bTargeting && !bLShiftKeyDown)
 	{
 		const APawn* ControlledPawn = GetPawn();
 		if (FollowTime <= ShortPressThreshold && ControlledPawn)
@@ -129,9 +129,9 @@ void AB9PlayerController::AbilityInputTagReleased(FGameplayTag InputTag)
 				bAutoRunning = true;
 			}
 		}
+	}
 		bTargeting = false;
 		FollowTime = 0.f;
-	}
 }
 
 void AB9PlayerController::AbilityInputTagHeld(FGameplayTag InputTag)
@@ -142,7 +142,7 @@ void AB9PlayerController::AbilityInputTagHeld(FGameplayTag InputTag)
 			GetASC()->AbilityInputTagHeld(InputTag);
 		return;
 	}
-	if (bTargeting)
+	if (bTargeting || bLShiftKeyDown)
 	{
 		if (GetASC())
 			GetASC()->AbilityInputTagHeld(InputTag);

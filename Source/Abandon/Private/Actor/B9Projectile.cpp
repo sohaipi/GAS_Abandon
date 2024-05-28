@@ -20,8 +20,8 @@ AB9Projectile::AB9Projectile()
 	Sphere->SetCollisionResponseToChannel(ECC_Pawn,ECR_Overlap);
 	
 	ProjectileMovementComp = CreateDefaultSubobject<UProjectileMovementComponent>("ProjectileMovementComp");
-	ProjectileMovementComp->InitialSpeed = 100.F;
-	ProjectileMovementComp->MaxSpeed = 1000.F;
+	ProjectileMovementComp->InitialSpeed = 2000.F;
+	ProjectileMovementComp->MaxSpeed = 2000.F;
 	ProjectileMovementComp->ProjectileGravityScale = 0.F;
 }
 void AB9Projectile::BeginPlay()
