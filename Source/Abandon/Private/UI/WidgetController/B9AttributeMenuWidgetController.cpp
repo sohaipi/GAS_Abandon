@@ -14,6 +14,7 @@ void UB9AttributeMenuWidgetController::BindCallbacksToDependencies()
 	const UB9AttributeSet* B9AttributeSet = CastChecked<class UB9AttributeSet>(AttributeSet);
 	for (auto& Pair:B9AttributeSet->TagsToAttributes)
 	{
+		//lambda的使用。由多播激活函数体。[capture list] (parameter list) -> return type { function body }
 		AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(Pair.Value()).AddLambda(
 		[Pair,this](const FOnAttributeChangeData& Data)
 		{	

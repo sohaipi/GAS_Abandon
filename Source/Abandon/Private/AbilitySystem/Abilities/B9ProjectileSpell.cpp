@@ -13,7 +13,12 @@ void UB9ProjectileSpell::ActivateAbility(const FGameplayAbilitySpecHandle Handle
 {
 	Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
 	
-	const bool bIsServer = HasAuthority(&ActivationInfo);
+	SpawnProjectile();
+}
+
+void UB9ProjectileSpell::SpawnProjectile()
+{
+	const bool bIsServer = GetOwningActorFromActorInfo()->HasAuthority();
 	if (!bIsServer) return;;
 	
 	if (ICombatInterface* CombatInterface = Cast<ICombatInterface>(GetAvatarActorFromActorInfo()))
@@ -26,5 +31,4 @@ void UB9ProjectileSpell::ActivateAbility(const FGameplayAbilitySpecHandle Handle
 
 		ProjectileSpawn->FinishSpawning(SpawnLocation);
 	}
-
 }
