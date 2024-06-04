@@ -4,6 +4,7 @@
 #include "Character/B9CharacterBase.h"
 
 #include "AbilitySystemComponent.h"
+#include "Abandon/Abandon.h"
 #include "AbilitySystem/B9AbilitySystemComponent.h"
 #include "Components/CapsuleComponent.h"
 
@@ -11,7 +12,10 @@ AB9CharacterBase::AB9CharacterBase()
 {
 	PrimaryActorTick.bCanEverTick = false;
 	GetCapsuleComponent()->SetCollisionResponseToChannel(ECC_Camera,ECR_Ignore);
+	GetCapsuleComponent()->SetGenerateOverlapEvents(false);
 	GetMesh()->SetCollisionResponseToChannel(ECC_Camera,ECR_Ignore);
+	GetMesh()->SetCollisionResponseToChannel(ECC_Projectile,ECR_Overlap);
+	GetMesh()->SetGenerateOverlapEvents(true);
 
 	Weapon = CreateDefaultSubobject<USkeletalMeshComponent>("WeaponStr");
 	Weapon->SetupAttachment(GetMesh(),FName("WeaponHandSocket"));

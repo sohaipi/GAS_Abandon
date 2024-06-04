@@ -5,8 +5,10 @@
 #include "CoreMinimal.h"
 #include "Character/B9CharacterBase.h"
 #include "Interaction/EnemyInterface.h"
+#include "UI/WidgetController/B9OverlayWidgetController.h"
 #include "B9Enemy.generated.h"
 
+class UWidgetComponent;
 /**
  * 
  */
@@ -30,9 +32,17 @@ public:
 	UPROPERTY(BlueprintReadOnly)
 	bool bHighlight=false;
 
+	UPROPERTY(BlueprintAssignable)
+	FOnAttributeChangedSignature OnHealthChanged;
+	UPROPERTY(BlueprintAssignable)
+	FOnAttributeChangedSignature OnMaxHealthChanged;
+
 protected:
 	virtual void InitAbilityActorInfo() override;
 	
 	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category = "Character Class Defaults")
 	int32 Level = 1;
+
+	UPROPERTY(VisibleAnywhere,BlueprintReadOnly)
+	TObjectPtr<UWidgetComponent> HealthBar;
 };

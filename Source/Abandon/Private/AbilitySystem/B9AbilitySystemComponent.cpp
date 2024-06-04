@@ -41,12 +41,15 @@ void UB9AbilitySystemComponent::AbilityInputTagReleased(const FGameplayTag& Inpu
 		if (AbilitySpec.DynamicAbilityTags.HasTagExact(InputTag))
 		{
 			AbilitySpecInputReleased(AbilitySpec);
+						
+
 		}
 	}
 }
 
 void UB9AbilitySystemComponent::AbilityInputTagHeld(const FGameplayTag& InputTag)
 {
+	
 	if (!InputTag.IsValid()) return;
 	for (auto AbilitySpec:GetActivatableAbilities())
 	{
@@ -54,7 +57,6 @@ void UB9AbilitySystemComponent::AbilityInputTagHeld(const FGameplayTag& InputTag
 		{
 			//告诉Ability输入已按下
 			AbilitySpecInputPressed(AbilitySpec);
-			
 			if (!AbilitySpec.IsActive())
 			{
 				TryActivateAbility(AbilitySpec.Handle);

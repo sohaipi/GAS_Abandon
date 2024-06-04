@@ -2,6 +2,9 @@
 
 
 #include "AbilitySystem/Abilities/B9ProjectileSpell.h"
+
+#include "AbilitySystemBlueprintLibrary.h"
+#include "AbilitySystemComponent.h"
 #include "Interaction/CombatInterface.h"
 #include "Actor/B9Projectile.h"
 
@@ -31,6 +34,10 @@ void UB9ProjectileSpell::SpawnProjectile(const FVector& ProjectileTargetLocation
 		AB9Projectile* ProjectileSpawn = GetWorld()->SpawnActorDeferred<AB9Projectile>(ProjectileClass,SpawnTransform,GetOwningActorFromActorInfo(),
 			Cast<APawn>(GetOwningActorFromActorInfo()),ESpawnActorCollisionHandlingMethod::AlwaysSpawn);
 
+		const UAbilitySystemComponent* SourceAsc = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(GetAvatarActorFromActorInfo());
+		const FGameplayEffectSpecHandle DamageSpecHandle = SourceAsc->MakeOutgoingSpec(DamageEffectClass,GetAbilityLevel(),SourceAsc->MakeEffectContext());
+		ProjectileSpawn->DamageEffectSpecHandle = DamageSpecHandle;
+		
 		ProjectileSpawn->FinishSpawning(SpawnTransform);
 	}
 }

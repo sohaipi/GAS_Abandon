@@ -123,6 +123,7 @@ void UB9AttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallback
 	if (Data.EvaluatedData.Attribute == GetHealthAttribute())
 	{
 		SetHealth(FMath::Clamp(GetHealth(),0.f,GetMaxHealth()));
+		/*UE_LOG(LogTemp,Warning,TEXT("%s,发生血量变化：%f"),*Props.TargetAvatarActor->GetName(),GetHealth());*/
 	}
 	if (Data.EvaluatedData.Attribute == GetManaAttribute())
 	{

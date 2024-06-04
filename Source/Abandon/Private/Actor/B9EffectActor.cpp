@@ -21,9 +21,9 @@ AB9EffectActor::AB9EffectActor()
 
 	
 	//Debug
-	/*StaticMesh= CreateDefaultSubobject<UStaticMeshComponent>("StaticMesh");
+	/*StaticMesh= CreateDefaultSubObject<UStaticMeshComponent>("StaticMesh");
 	SetRootComponent(StaticMesh);
-	Sphere = CreateDefaultSubobject<USphereComponent>("Sphere");
+	Sphere = CreateDefaultSubObject<USphereComponent>("Sphere");
 	Sphere->SetupAttachment(GetRootComponent());*/
 }
 
