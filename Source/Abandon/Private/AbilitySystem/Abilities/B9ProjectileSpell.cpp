@@ -5,6 +5,7 @@
 
 #include "AbilitySystemBlueprintLibrary.h"
 #include "AbilitySystemComponent.h"
+#include "B9GameplayTags.h"
 #include "Interaction/CombatInterface.h"
 #include "Actor/B9Projectile.h"
 
@@ -36,6 +37,11 @@ void UB9ProjectileSpell::SpawnProjectile(const FVector& ProjectileTargetLocation
 
 		const UAbilitySystemComponent* SourceAsc = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(GetAvatarActorFromActorInfo());
 		const FGameplayEffectSpecHandle DamageSpecHandle = SourceAsc->MakeOutgoingSpec(DamageEffectClass,GetAbilityLevel(),SourceAsc->MakeEffectContext());
+
+		FB9GameplayTags GameplayTags = FB9GameplayTags::Get();
+		//TODO 将数值用技能等级拆分
+		//根据tag查找 magnitude;
+		UAbilitySystemBlueprintLibrary::AssignTagSetByCallerMagnitude(DamageSpecHandle,GameplayTags.Damage,50.f);
 		ProjectileSpawn->DamageEffectSpecHandle = DamageSpecHandle;
 		
 		ProjectileSpawn->FinishSpawning(SpawnTransform);

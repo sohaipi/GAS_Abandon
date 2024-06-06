@@ -48,7 +48,7 @@ protected:
 	//提升到base使多播委托的绑定在此函数中执行。
 	virtual void InitAbilityActorInfo();
 
-	void InitDefaultAttribute() const;
+	virtual void InitDefaultAttribute() const;
 	void ApplyEffectToTarget(TSubclassOf<UGameplayEffect> DefaultAttributes, float Level) const;
 
 	void AddCharacterAbilities();

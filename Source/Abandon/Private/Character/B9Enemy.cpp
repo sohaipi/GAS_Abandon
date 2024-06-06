@@ -6,6 +6,7 @@
 #include "Abandon/Abandon.h"
 #include "AbilitySystem/B9AbilitySystemComponent.h"
 #include "AbilitySystem/B9AttributeSet.h"
+#include "AbilitySystem/B9_ASC_BlueprintLibrary.h"
 #include "Components/WidgetComponent.h"
 #include "UI/Widget/B9UserWidget.h"
 
@@ -74,4 +75,9 @@ void AB9Enemy::InitAbilityActorInfo()
 	Cast<UB9AbilitySystemComponent>(AbilitySystemComponent)->AbilityActorInfoSet();
 
 	InitDefaultAttribute(); 
+}
+
+void AB9Enemy::InitDefaultAttribute() const
+{
+	UB9_ASC_BlueprintLibrary::InitializeDefaultAttributes(this,CharacterClass,Level,AbilitySystemComponent);
 }

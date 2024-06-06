@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
+#include "Data/B9CharacterClassInfo.h"
 #include "B9_ASC_BlueprintLibrary.generated.h"
 
 class UB9AttributeMenuWidgetController;
@@ -22,5 +23,7 @@ public:
 	
 	UFUNCTION(BlueprintPure,Category = "B9_ASC_BlueprintLibrary|WidgetController")
 	static UB9AttributeMenuWidgetController* GetAttributeMenuWidgetController(const UObject* WorldContextObject);
-	
+
+	UFUNCTION(BlueprintCallable,Category = "B9_ASC_BlueprintLibrary|CharacterAttribute")
+	static void InitializeDefaultAttributes(const UObject* WorldContextObject,ECharacterClass CharacterClass,float Level,UAbilitySystemComponent* ASC);
 };

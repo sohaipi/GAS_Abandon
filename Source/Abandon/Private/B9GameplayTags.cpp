@@ -60,4 +60,10 @@ void FB9GameplayTags::InitializeNativeGameplayTags()
 		FName("InputTag.3"),FString("InputTag:Keyboard_3"));
 	B9GameplayTags.InputTag_4 = UGameplayTagsManager::Get().AddNativeGameplayTag(
 		FName("InputTag.4"),FString("InputTag:Keyboard_4"));
+	
+	//Abilities Tags
+	B9GameplayTags.Damage = UGameplayTagsManager::Get().AddNativeGameplayTag(
+	FName("Damage"),FString("Damage"));
+	B9GameplayTags.Effect_Ability_React = UGameplayTagsManager::Get().AddNativeGameplayTag(
+	FName("Effect.Ability.React"),FString("Damage React"));
 }

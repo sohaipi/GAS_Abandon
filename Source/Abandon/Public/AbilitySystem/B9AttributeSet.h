@@ -151,8 +151,16 @@ public:
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_ManaRegeneration, Category = "Secondary Attributes")
 	FGameplayAttributeData ManaRegeneration;//Amount of Mana regenerated every 1 second
 	ATTRIBUTE_ACCESSORS(UB9AttributeSet,ManaRegeneration);
-	
 
+
+	/*
+	* Meta Attributes
+	*/
+	UPROPERTY(BlueprintReadOnly, Category = "Meta Attributes")
+	FGameplayAttributeData IncomingDamage;
+	ATTRIBUTE_ACCESSORS(UB9AttributeSet,IncomingDamage);
+
+	//
 	UPROPERTY()
 	FEffectSourceProperties EffectSourceProperties;
 	//使用 （const a& b） 的引用声明，使频繁被调用时，降低开销。 使用 a() const,保证不能修改所属类的非静态成员变量。

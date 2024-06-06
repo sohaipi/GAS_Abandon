@@ -6,6 +6,7 @@
 #include "Character/B9CharacterBase.h"
 #include "Interaction/EnemyInterface.h"
 #include "UI/WidgetController/B9OverlayWidgetController.h"
+#include "AbilitySystem/Data/B9CharacterClassInfo.h"
 #include "B9Enemy.generated.h"
 
 class UWidgetComponent;
@@ -39,9 +40,12 @@ public:
 
 protected:
 	virtual void InitAbilityActorInfo() override;
+	virtual void InitDefaultAttribute() const;
 	
 	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category = "Character Class Defaults")
 	int32 Level = 1;
+	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category = "Character Class Defaults")
+	ECharacterClass CharacterClass = ECharacterClass::Elementalist;
 
 	UPROPERTY(VisibleAnywhere,BlueprintReadOnly)
 	TObjectPtr<UWidgetComponent> HealthBar;
