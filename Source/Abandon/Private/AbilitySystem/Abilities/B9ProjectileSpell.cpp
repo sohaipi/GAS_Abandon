@@ -39,9 +39,10 @@ void UB9ProjectileSpell::SpawnProjectile(const FVector& ProjectileTargetLocation
 		const FGameplayEffectSpecHandle DamageSpecHandle = SourceAsc->MakeOutgoingSpec(DamageEffectClass,GetAbilityLevel(),SourceAsc->MakeEffectContext());
 
 		FB9GameplayTags GameplayTags = FB9GameplayTags::Get();
-		//TODO 将数值用技能等级拆分
+		//TODO 将数值用技能等级拆分 
 		//根据tag查找 magnitude;
-		UAbilitySystemBlueprintLibrary::AssignTagSetByCallerMagnitude(DamageSpecHandle,GameplayTags.Damage,50.f);
+		const float ScaledDamage = Damage.GetValueAtLevel(GetAbilityLevel()); 
+		UAbilitySystemBlueprintLibrary::AssignTagSetByCallerMagnitude(DamageSpecHandle,GameplayTags.Damage,ScaledDamage);
 		ProjectileSpawn->DamageEffectSpecHandle = DamageSpecHandle;
 		
 		ProjectileSpawn->FinishSpawning(SpawnTransform);

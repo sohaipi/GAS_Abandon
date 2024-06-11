@@ -24,6 +24,8 @@ public:
 	UFUNCTION(BlueprintPure,Category = "B9_ASC_BlueprintLibrary|WidgetController")
 	static UB9AttributeMenuWidgetController* GetAttributeMenuWidgetController(const UObject* WorldContextObject);
 
-	UFUNCTION(BlueprintCallable,Category = "B9_ASC_BlueprintLibrary|CharacterAttribute")
+	UFUNCTION(BlueprintCallable,Category = "B9_ASC_BlueprintLibrary|CharacterDefault")
 	static void InitializeDefaultAttributes(const UObject* WorldContextObject,ECharacterClass CharacterClass,float Level,UAbilitySystemComponent* ASC);
+	UFUNCTION(BlueprintCallable,Category = "B9_ASC_BlueprintLibrary|CharacterDefault")
+	static void GiveStartupAbilities(const UObject* WorldContextObject,UAbilitySystemComponent* ASC);
 };

@@ -139,6 +139,12 @@ void UB9AttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallback
 			SetHealth(FMath::Clamp(NewHealth,0.f,GetMaxHealth()));
 
 			const bool bFatal = NewHealth <=0.f;
+			if (!bFatal)
+			{
+				FGameplayTagContainer TagContainer;
+				TagContainer.AddTag(FB9GameplayTags::Get().Effect_Ability_HitReact);
+				Props.TargetASC->TryActivateAbilitiesByTag(TagContainer);
+			}
 		}
 	}
 }

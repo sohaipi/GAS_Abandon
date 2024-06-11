@@ -68,3 +68,16 @@ void UB9_ASC_BlueprintLibrary::InitializeDefaultAttributes(const UObject* WorldC
 	const FGameplayEffectSpecHandle VitalOutgoingSpec = ASC->MakeOutgoingSpec(CharacterClassInfo->VitalAttributes,Level,VitalEffectContextHandle);
 	ASC->ApplyGameplayEffectSpecToSelf(*VitalOutgoingSpec.Data.Get());
 }
+
+void UB9_ASC_BlueprintLibrary::GiveStartupAbilities(const UObject* WorldContextObject, UAbilitySystemComponent* ASC)
+{
+	const AB9GameModeBase* GameModeBase = Cast<AB9GameModeBase>(UGameplayStatics::GetGameMode(WorldContextObject));
+	if (GameModeBase == nullptr) return;
+
+	UB9CharacterClassInfo* CharacterClassInfo = GameModeBase->CharacterClassInfo;
+	for (const TSubclassOf<UGameplayAbility> AbilityClass : CharacterClassInfo->CommonAbilities)
+	{
+		FGameplayAbilitySpec AbilitySpec = FGameplayAbilitySpec(AbilityClass,1);
+		ASC->GiveAbility(AbilitySpec);
+	}
+}

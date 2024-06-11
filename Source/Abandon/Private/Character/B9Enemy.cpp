@@ -9,6 +9,8 @@
 #include "AbilitySystem/B9_ASC_BlueprintLibrary.h"
 #include "Components/WidgetComponent.h"
 #include "UI/Widget/B9UserWidget.h"
+#include "B9GameplayTags.h"
+#include "GameFramework/CharacterMovementComponent.h"
 
 AB9Enemy::AB9Enemy()
 {
@@ -30,7 +32,8 @@ void AB9Enemy::BeginPlay()
 	Super::BeginPlay();
 
 	InitAbilityActorInfo();
-
+	GetCharacterMovement()->MaxWalkSpeed = BaseWalkSpeed;
+	UB9_ASC_BlueprintLibrary::GiveStartupAbilities(this,AbilitySystemComponent);
 
 	if (UB9UserWidget* UserWidget = Cast<UB9UserWidget>(HealthBar->GetUserWidgetObject()))
 	{
@@ -46,6 +49,10 @@ void AB9Enemy::BeginPlay()
 			B9AttributeSet->GetMaxHealthAttribute()).AddLambda(
 				[this](const FOnAttributeChangeData& Data){OnMaxHealthChanged.Broadcast(Data.NewValue);}
 			);
+	//Allow events to be registered for specific gameplay tags being added or removed
+	AbilitySystemComponent->RegisterGameplayTagEvent(FB9GameplayTags::Get().Effect_Ability_HitReact,EGameplayTagEventType::NewOrRemoved).AddUObject(
+			this,&AB9Enemy::HitReactOnDamage);
+	
 	OnHealthChanged.Broadcast(B9AttributeSet->GetHealth());
 	OnMaxHealthChanged.Broadcast(B9AttributeSet->GetMaxHealth());
 }
@@ -69,12 +76,18 @@ int32 AB9Enemy::GetPlayerLevel()
 	return Level;
 }
 
+void AB9Enemy::HitReactOnDamage(const FGameplayTag Tag, int32 TagCount)
+{
+	bHitReacting = TagCount > 0;
+	GetCharacterMovement()->MaxWalkSpeed = bHitReacting ? 0.f : BaseWalkSpeed;
+}
+
 void AB9Enemy::InitAbilityActorInfo()
 {
 	AbilitySystemComponent->InitAbilityActorInfo(this,this);
 	Cast<UB9AbilitySystemComponent>(AbilitySystemComponent)->AbilityActorInfoSet();
 
-	InitDefaultAttribute(); 
+	InitDefaultAttribute();
 }
 
 void AB9Enemy::InitDefaultAttribute() const

@@ -8,6 +8,7 @@
 #include "Interaction/CombatInterface.h"
 #include "B9CharacterBase.generated.h"
 
+class UAnimMontage;
 class UGameplayAbility;
 class UGameplayEffect;
 class UAbilitySystemComponent;
@@ -23,7 +24,8 @@ public:
 	AB9CharacterBase();
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 	UAttributeSet* GetAttributeSet() const{return AttributeSet;}
-	
+
+	virtual UAnimMontage* GetHitReactMontage_Implementation() override;
 protected:
 	virtual void BeginPlay() override;
 
@@ -54,5 +56,8 @@ protected:
 	void AddCharacterAbilities();
 private:
 	UPROPERTY(EditAnywhere,Category = "Abilities")
-	TArray<TSubclassOf<UGameplayAbility>> StartupAbilities; 
+	TArray<TSubclassOf<UGameplayAbility>> StartupAbilities;
+
+	UPROPERTY(EditAnywhere,Category = "Combat")
+	TObjectPtr<UAnimMontage> HitReactMontage;
 };

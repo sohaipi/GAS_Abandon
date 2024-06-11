@@ -64,6 +64,6 @@ void FB9GameplayTags::InitializeNativeGameplayTags()
 	//Abilities Tags
 	B9GameplayTags.Damage = UGameplayTagsManager::Get().AddNativeGameplayTag(
 	FName("Damage"),FString("Damage"));
-	B9GameplayTags.Effect_Ability_React = UGameplayTagsManager::Get().AddNativeGameplayTag(
-	FName("Effect.Ability.React"),FString("Damage React"));
+	B9GameplayTags.Effect_Ability_HitReact = UGameplayTagsManager::Get().AddNativeGameplayTag(
+	FName("Effect.Ability.HitReact"),FString("Damage React"));
 }

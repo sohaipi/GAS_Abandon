@@ -27,6 +27,11 @@ UAbilitySystemComponent* AB9CharacterBase::GetAbilitySystemComponent() const
 	return AbilitySystemComponent;
 }
 
+UAnimMontage* AB9CharacterBase::GetHitReactMontage_Implementation()
+{
+	return HitReactMontage;
+}
+
 void AB9CharacterBase::BeginPlay()
 {
 	Super::BeginPlay();
@@ -63,8 +68,9 @@ void AB9CharacterBase::ApplyEffectToTarget(TSubclassOf<UGameplayEffect> DefaultA
 
 void AB9CharacterBase::AddCharacterAbilities()
 {
+	UB9AbilitySystemComponent* B9ASC = CastChecked<UB9AbilitySystemComponent>(AbilitySystemComponent);
 	//只允许在服务器添加
 	if (!HasAuthority()) return;
-	CastChecked<UB9AbilitySystemComponent>(AbilitySystemComponent)->AddCharacterAbilities(StartupAbilities);
+	B9ASC->AddCharacterAbilities(StartupAbilities);
 }
 

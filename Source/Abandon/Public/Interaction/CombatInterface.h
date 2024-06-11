@@ -27,4 +27,8 @@ public:
 
 	UFUNCTION(BlueprintImplementableEvent,BlueprintCallable)
 	void UpdateWarpingTarget(const FVector& Target);
+
+	//蓝图引用声明则无法在C++中覆写，故使用此声明，既可以在C中覆写，又可以在蓝图中引用，会自动生成一个虚拟版本以在C中覆写。
+	UFUNCTION(BlueprintNativeEvent,BlueprintCallable)
+	UAnimMontage* GetHitReactMontage();
 };
