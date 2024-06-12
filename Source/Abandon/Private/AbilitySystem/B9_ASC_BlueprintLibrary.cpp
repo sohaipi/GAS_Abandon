@@ -57,8 +57,8 @@ void UB9_ASC_BlueprintLibrary::InitializeDefaultAttributes(const UObject* WorldC
 	AActor* AvatarActor = ASC->GetAvatarActor();
 	FGameplayEffectContextHandle PrimaryEffectContextHandle = ASC->MakeEffectContext();
 	PrimaryEffectContextHandle.AddSourceObject(AvatarActor);
-	const FGameplayEffectSpecHandle PrimaryOutgoingSpec = ASC->MakeOutgoingSpec(DefaultInfo.PrimaryAttributes,Level,PrimaryEffectContextHandle);
-	ASC->ApplyGameplayEffectSpecToSelf(*PrimaryOutgoingSpec.Data.Get());
+	const FGameplayEffectSpecHandle PrimaryOutgoingSpecHandle = ASC->MakeOutgoingSpec(DefaultInfo.PrimaryAttributes,Level,PrimaryEffectContextHandle);
+	ASC->ApplyGameplayEffectSpecToSelf(*PrimaryOutgoingSpecHandle.Data.Get());
 	FGameplayEffectContextHandle SecondaryEffectContextHandle = ASC->MakeEffectContext();
 	SecondaryEffectContextHandle.AddSourceObject(AvatarActor);
 	const FGameplayEffectSpecHandle SecondaryOutgoingSpec = ASC->MakeOutgoingSpec(CharacterClassInfo->SecondaryAttributes,Level,SecondaryEffectContextHandle);
@@ -75,7 +75,7 @@ void UB9_ASC_BlueprintLibrary::GiveStartupAbilities(const UObject* WorldContextO
 	if (GameModeBase == nullptr) return;
 
 	UB9CharacterClassInfo* CharacterClassInfo = GameModeBase->CharacterClassInfo;
-	for (const TSubclassOf<UGameplayAbility> AbilityClass : CharacterClassInfo->CommonAbilities)
+	for (TSubclassOf<UGameplayAbility> AbilityClass : CharacterClassInfo->CommonAbilities)
 	{
 		FGameplayAbilitySpec AbilitySpec = FGameplayAbilitySpec(AbilityClass,1);
 		ASC->GiveAbility(AbilitySpec);

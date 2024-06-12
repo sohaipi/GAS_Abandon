@@ -5,6 +5,7 @@
 
 #include "AbilitySystem/B9AbilitySystemComponent.h"
 #include "AbilitySystem/B9AttributeSet.h"
+#include "Net/UnrealNetwork.h"
 
 AB9PlayerState::AB9PlayerState()
 {
@@ -21,6 +22,8 @@ AB9PlayerState::AB9PlayerState()
 void AB9PlayerState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+	
+	DOREPLIFETIME(AB9PlayerState,Level);
 }
 
 UAbilitySystemComponent* AB9PlayerState::GetAbilitySystemComponent() const

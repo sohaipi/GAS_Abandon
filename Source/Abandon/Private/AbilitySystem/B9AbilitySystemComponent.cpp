@@ -36,13 +36,12 @@ void UB9AbilitySystemComponent::AddCharacterAbilities(const TArray<TSubclassOf<U
 void UB9AbilitySystemComponent::AbilityInputTagReleased(const FGameplayTag& InputTag)
 {
 	if (!InputTag.IsValid()) return;
-	for (auto AbilitySpec:GetActivatableAbilities())
+	
+	for (FGameplayAbilitySpec& AbilitySpec:GetActivatableAbilities())
 	{
 		if (AbilitySpec.DynamicAbilityTags.HasTagExact(InputTag))
 		{
 			AbilitySpecInputReleased(AbilitySpec);
-						
-
 		}
 	}
 }
@@ -51,7 +50,8 @@ void UB9AbilitySystemComponent::AbilityInputTagHeld(const FGameplayTag& InputTag
 {
 	
 	if (!InputTag.IsValid()) return;
-	for (auto AbilitySpec:GetActivatableAbilities())
+	
+	for (FGameplayAbilitySpec& AbilitySpec:GetActivatableAbilities())
 	{
 		if (AbilitySpec.DynamicAbilityTags.HasTagExact(InputTag))
 		{
@@ -73,6 +73,4 @@ void UB9AbilitySystemComponent::ClientEffectApplied_Implementation(UAbilitySyste
 	GameplayEffectSpec.GetAllAssetTags(TagContainer);
 
 	EffectAssetTags.Broadcast(TagContainer);
-
-
 }

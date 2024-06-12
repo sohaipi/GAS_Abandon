@@ -77,7 +77,7 @@ void UB9AttributeSet::PreAttributeChange(const FGameplayAttribute& Attribute, fl
 		/*UE_LOG(LogTemp,Warning,TEXT("Mana: %f"),NewValue);*/
 	}
 }
-void UB9AttributeSet::SetEffectProperties(const FGameplayEffectModCallbackData& Data, FEffectSourceProperties Props)
+void UB9AttributeSet::SetEffectProperties(const FGameplayEffectModCallbackData& Data, FEffectSourceProperties& Props) const
 {
 	Props.EffectContextHandle =  Data.EffectSpec.GetContext();
 	
@@ -95,7 +95,8 @@ void UB9AttributeSet::SetEffectProperties(const FGameplayEffectModCallbackData& 
 		}
 		if (Props.SourceController)
 		{
-			Props.SourceCharacter = Cast<ACharacter>(Props.SourceController->GetPawn());
+			// 奔溃? Props.SourceCharacter = Cast<ACharacter>(Props.SourceController->GetPawn());
+			ACharacter* SourceCharacter = Cast<ACharacter>(Props.SourceController->GetPawn());
 		}
 
 		
@@ -116,7 +117,7 @@ void UB9AttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallback
 {
 	Super::PostGameplayEffectExecute(Data);
 	
-	const FEffectSourceProperties Props;
+	FEffectSourceProperties Props;
 	SetEffectProperties(Data,Props);
 
 	//最终限制住属性数值。

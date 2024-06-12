@@ -160,9 +160,7 @@ public:
 	FGameplayAttributeData IncomingDamage;
 	ATTRIBUTE_ACCESSORS(UB9AttributeSet,IncomingDamage);
 
-	//
-	UPROPERTY()
-	FEffectSourceProperties EffectSourceProperties;
+	
 	//使用 （const a& b） 的引用声明，使频繁被调用时，降低开销。 使用 a() const,保证不能修改所属类的非静态成员变量。
 	//Step2 通知函数
 	UFUNCTION()
@@ -200,6 +198,10 @@ public:
 	UFUNCTION()
 	void OnRep_ManaRegeneration(const FGameplayAttributeData& OldManaRegeneration) const;
 	
-
-	void SetEffectProperties(const FGameplayEffectModCallbackData& Data,FEffectSourceProperties Props);
+private:
+	
+	void SetEffectProperties(const FGameplayEffectModCallbackData& Data,FEffectSourceProperties& Props)const;
+	//多了下面这句导致崩溃吗?
+	/*UPROPERTY()
+	FEffectSourceProperties EffectSourceProperties;*/
 };

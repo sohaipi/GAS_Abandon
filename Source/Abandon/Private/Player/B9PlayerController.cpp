@@ -27,7 +27,7 @@ void AB9PlayerController::BeginPlay()
 	check(B9Context);
 	
 	if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(GetLocalPlayer()))
-		Subsystem->AddMappingContext(B9Context, 3);
+		Subsystem->AddMappingContext(B9Context, 0);
 	
 	bShowMouseCursor = true;
 	DefaultMouseCursor = EMouseCursor::Default;
@@ -129,9 +129,9 @@ void AB9PlayerController::AbilityInputTagReleased(FGameplayTag InputTag)
 				bAutoRunning = true;
 			}
 		}
-	}
 		bTargeting = false;
 		FollowTime = 0.f;
+	}
 }
 
 void AB9PlayerController::AbilityInputTagHeld(FGameplayTag InputTag)

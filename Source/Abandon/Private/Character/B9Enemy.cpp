@@ -39,22 +39,27 @@ void AB9Enemy::BeginPlay()
 	{
 		UserWidget->SetWidgetController(this);		
 	}
-	
-	const UB9AttributeSet* B9AttributeSet = CastChecked<class UB9AttributeSet>(AttributeSet);
-	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(
+
+	if (const UB9AttributeSet* B9AttributeSet = Cast<class UB9AttributeSet>(AttributeSet))
+	{
+		AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(
 				B9AttributeSet->GetHealthAttribute()).AddLambda(
-					[this](const FOnAttributeChangeData& Data){OnHealthChanged.Broadcast(Data.NewValue);}
+					[this](const FOnAttributeChangeData& Data)
+					{OnHealthChanged.Broadcast(Data.NewValue);}
 				);
-	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(
-			B9AttributeSet->GetMaxHealthAttribute()).AddLambda(
-				[this](const FOnAttributeChangeData& Data){OnMaxHealthChanged.Broadcast(Data.NewValue);}
-			);
-	//Allow events to be registered for specific gameplay tags being added or removed
-	AbilitySystemComponent->RegisterGameplayTagEvent(FB9GameplayTags::Get().Effect_Ability_HitReact,EGameplayTagEventType::NewOrRemoved).AddUObject(
-			this,&AB9Enemy::HitReactOnDamage);
+		AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(
+				B9AttributeSet->GetMaxHealthAttribute()).AddLambda(
+					[this](const FOnAttributeChangeData& Data)
+					{OnMaxHealthChanged.Broadcast(Data.NewValue);}
+				);
+		//Allow events to be registered for specific gameplay tags being added or removed
+		AbilitySystemComponent->RegisterGameplayTagEvent(FB9GameplayTags::Get().Effect_Ability_HitReact,EGameplayTagEventType::NewOrRemoved).AddUObject(
+				this,&AB9Enemy::HitReactOnDamage);
 	
-	OnHealthChanged.Broadcast(B9AttributeSet->GetHealth());
-	OnMaxHealthChanged.Broadcast(B9AttributeSet->GetMaxHealth());
+		OnHealthChanged.Broadcast(B9AttributeSet->GetHealth());
+		OnMaxHealthChanged.Broadcast(B9AttributeSet->GetMaxHealth());
+	}
+	
 }
 
 void AB9Enemy::HighlightActor()

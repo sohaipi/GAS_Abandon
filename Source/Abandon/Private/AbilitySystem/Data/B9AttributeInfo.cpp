@@ -7,7 +7,7 @@ FB9AttributeInformation UB9AttributeInfo::FindAttributeInfoForTag(const FGamepla
 {
 	for (const FB9AttributeInformation& Info: B9AttributeInformation)
 	{
-		if (Info.AttributeTag == AttributeTag)
+		if (Info.AttributeTag.MatchesTagExact(AttributeTag))
 		{
 			return Info;
 		}

@@ -8,7 +8,8 @@
 UB9AssetManager& UB9AssetManager::Get()
 {
 	check(GEngine);
-	UB9AssetManager* B9AssetManager =  Cast<UB9AssetManager>(GEngine->AssetManager.Get());
+	UB9AssetManager* B9AssetManager =  Cast<UB9AssetManager>(GEngine->AssetManager);
+	// 因为这个崩溃？ UB9AssetManager* B9AssetManager =  Cast<UB9AssetManager>(GEngine->AssetManager.Get());
 	return *B9AssetManager;
 }
 

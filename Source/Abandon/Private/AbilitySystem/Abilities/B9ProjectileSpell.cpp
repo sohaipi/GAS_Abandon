@@ -20,8 +20,9 @@ void UB9ProjectileSpell::ActivateAbility(const FGameplayAbilitySpecHandle Handle
 
 void UB9ProjectileSpell::SpawnProjectile(const FVector& ProjectileTargetLocation)
 {
-	const bool bIsServer = GetOwningActorFromActorInfo()->HasAuthority();
-	if (!bIsServer) return;;
+	const bool bIsServer = GetAvatarActorFromActorInfo()->HasAuthority();
+	/*查问题，可删const bool bIsServer = GetOwningActorFromActorInfo()->HasAuthority();*/
+	if (!bIsServer) return;
 	
 	if (ICombatInterface* CombatInterface = Cast<ICombatInterface>(GetAvatarActorFromActorInfo()))
 	{
@@ -36,14 +37,14 @@ void UB9ProjectileSpell::SpawnProjectile(const FVector& ProjectileTargetLocation
 			Cast<APawn>(GetOwningActorFromActorInfo()),ESpawnActorCollisionHandlingMethod::AlwaysSpawn);
 
 		const UAbilitySystemComponent* SourceAsc = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(GetAvatarActorFromActorInfo());
-		const FGameplayEffectSpecHandle DamageSpecHandle = SourceAsc->MakeOutgoingSpec(DamageEffectClass,GetAbilityLevel(),SourceAsc->MakeEffectContext());
+		const FGameplayEffectSpecHandle SpecHandle = SourceAsc->MakeOutgoingSpec(DamageEffectClass,GetAbilityLevel(),SourceAsc->MakeEffectContext());
 
-		FB9GameplayTags GameplayTags = FB9GameplayTags::Get();
+		const FB9GameplayTags GameplayTags = FB9GameplayTags::Get();
 		//TODO 将数值用技能等级拆分 
 		//根据tag查找 magnitude;
 		const float ScaledDamage = Damage.GetValueAtLevel(GetAbilityLevel()); 
-		UAbilitySystemBlueprintLibrary::AssignTagSetByCallerMagnitude(DamageSpecHandle,GameplayTags.Damage,ScaledDamage);
-		ProjectileSpawn->DamageEffectSpecHandle = DamageSpecHandle;
+		UAbilitySystemBlueprintLibrary::AssignTagSetByCallerMagnitude(SpecHandle,GameplayTags.Damage,ScaledDamage);
+		ProjectileSpawn->DamageEffectSpecHandle = SpecHandle;
 		
 		ProjectileSpawn->FinishSpawning(SpawnTransform);
 	}
