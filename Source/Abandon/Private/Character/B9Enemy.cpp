@@ -81,6 +81,12 @@ int32 AB9Enemy::GetPlayerLevel()
 	return Level;
 }
 
+void AB9Enemy::Die()
+{
+	SetLifeSpan(LifeSpan);
+	Super::Die();
+}
+
 void AB9Enemy::HitReactOnDamage(const FGameplayTag Tag, int32 TagCount)
 {
 	bHitReacting = TagCount > 0;

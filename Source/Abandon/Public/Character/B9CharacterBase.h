@@ -54,6 +54,24 @@ protected:
 	void ApplyEffectToTarget(TSubclassOf<UGameplayEffect> DefaultAttributes, float Level) const;
 
 	void AddCharacterAbilities();
+
+	virtual void Die() override;
+
+	//死亡行为需要同步;
+	UFUNCTION(NetMulticast,Reliable)
+	virtual void MulticastHandleDeath();
+
+	void Dissolve();
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void StartDissolveTimeLine(UMaterialInstanceDynamic* MaterialInstanceDynamic);
+	UFUNCTION(BlueprintImplementableEvent)
+	void WeaponStartDissolveTimeLine(UMaterialInstanceDynamic* WeaponMaterialInstanceDynamic);
+
+	UPROPERTY(EditAnywhere,BlueprintReadOnly)
+	TObjectPtr<UMaterialInstance> DissolveMaterialInstance;
+	UPROPERTY(EditAnywhere,BlueprintReadOnly)
+	TObjectPtr<UMaterialInstance> WeaponDissolveMaterialInstance;
 private:
 	UPROPERTY(EditAnywhere,Category = "Abilities")
 	TArray<TSubclassOf<UGameplayAbility>> StartupAbilities;
