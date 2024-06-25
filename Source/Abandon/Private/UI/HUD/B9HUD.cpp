@@ -18,7 +18,7 @@ UB9OverlayWidgetController* AB9HUD::GetOverlayWidgetController(const FWidgetCont
 	}
 	return OverlayWidgetController;
 }
-
+ 
 UB9AttributeMenuWidgetController* AB9HUD::GetAttributeMenuWidgetController(const FWidgetControllerParams& WCParams)
 {
 	if(AttributeMenuWidgetController == nullptr)

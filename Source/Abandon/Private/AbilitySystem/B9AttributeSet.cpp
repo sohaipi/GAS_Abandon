@@ -9,6 +9,8 @@
 #include "Net/UnrealNetwork.h"
 #include "B9GameplayTags.h"
 #include "Interaction/CombatInterface.h"
+#include "Kismet/GameplayStatics.h"
+#include "Player/B9PlayerController.h"
 
 
 UB9AttributeSet::UB9AttributeSet()
@@ -95,11 +97,9 @@ void UB9AttributeSet::SetEffectProperties(const FGameplayEffectModCallbackData& 
 		}
 		if (Props.SourceController)
 		{
-			// 奔溃? Props.SourceCharacter = Cast<ACharacter>(Props.SourceController->GetPawn());
-			ACharacter* SourceCharacter = Cast<ACharacter>(Props.SourceController->GetPawn());
+			
+			Props.SourceCharacter = Cast<ACharacter>(Props.SourceController->GetPawn());
 		}
-
-		
 	}
 	
 
@@ -111,6 +111,8 @@ void UB9AttributeSet::SetEffectProperties(const FGameplayEffectModCallbackData& 
 		Props.TargetASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(Props.TargetAvatarActor);
 	}
 }
+
+
 
 
 void UB9AttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data)
@@ -153,6 +155,17 @@ void UB9AttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallback
 				TagContainer.AddTag(FB9GameplayTags::Get().Effect_Ability_HitReact);
 				Props.TargetASC->TryActivateAbilitiesByTag(TagContainer);
 			}
+			ShowFloatingText(Props,LocalIncomingDamage);
+		}
+	}
+}
+void UB9AttributeSet::ShowFloatingText(const FEffectSourceProperties& Props, float Damage) const
+{
+	if (Props.SourceCharacter != Props.TargetCharacter)
+	{
+		if (AB9PlayerController* PC = Cast<AB9PlayerController>(UGameplayStatics::GetPlayerController(Props.SourceCharacter,0)) )
+		{
+			PC->ShowDamageNumber(Damage,Props.TargetCharacter);
 		}
 	}
 }

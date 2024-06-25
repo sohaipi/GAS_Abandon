@@ -44,11 +44,11 @@ void AB9Character::InitAbilityActorInfo()
 {
 	AB9PlayerState* B9PlayerState = GetPlayerState<AB9PlayerState>();
 	check(B9PlayerState);
-	B9PlayerState->GetAbilitySystemComponent()->InitAbilityActorInfo(B9PlayerState,this);
-
-	Cast<UB9AbilitySystemComponent>(B9PlayerState->GetAbilitySystemComponent())->AbilityActorInfoSet();
-	
 	AbilitySystemComponent = B9PlayerState->GetAbilitySystemComponent();
+	AbilitySystemComponent->InitAbilityActorInfo(B9PlayerState,this);
+
+	Cast<UB9AbilitySystemComponent>(AbilitySystemComponent)->AbilityActorInfoSet();
+	
 	AttributeSet = B9PlayerState->GetAttributeSet();
 
 	if (AB9PlayerController* PlayerController =  Cast<AB9PlayerController>(GetController()))

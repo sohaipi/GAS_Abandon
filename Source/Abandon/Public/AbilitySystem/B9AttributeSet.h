@@ -7,7 +7,7 @@
 #include "AttributeSet.h"
 #include "B9AttributeSet.generated.h"
 //Ctl H替换
-//源码定义好的宏，用于使用四个对属性操作的函数。
+//源码定义好的宏，用于使用四个对属性操作的函数以改变或访问属性。
 #define ATTRIBUTE_ACCESSORS(ClassName, PropertyName) \
 	GAMEPLAYATTRIBUTE_PROPERTY_GETTER(ClassName, PropertyName) \
 	GAMEPLAYATTRIBUTE_VALUE_GETTER(PropertyName) \
@@ -204,4 +204,6 @@ private:
 	//多了下面这句导致崩溃吗?
 	/*UPROPERTY()
 	FEffectSourceProperties EffectSourceProperties;*/
+
+	void ShowFloatingText(const FEffectSourceProperties& Props,float Damage)const ;
 };

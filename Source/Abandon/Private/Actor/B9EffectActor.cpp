@@ -25,8 +25,8 @@ AB9EffectActor::AB9EffectActor()
 	SetRootComponent(StaticMesh);
 	Sphere = CreateDefaultSubObject<USphereComponent>("Sphere");
 	Sphere->SetupAttachment(GetRootComponent());*/
-}
-
+} 
+ 
 //Debug用重叠事件
 /*void AB9EffectActor::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
 	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool FromSweep, const FHitResult& SweepResult)
@@ -73,9 +73,11 @@ void AB9EffectActor::ApplyEffectToTarget(AActor* TargetActor, TSubclassOf<UGamep
 	if (TargetASC == nullptr) return;
 
 	check(GameplayEffectClass);
+	//GE上下文句柄，包含运行关键上下文
 	FGameplayEffectContextHandle EffectContextHandle =  TargetASC->MakeEffectContext();
 	EffectContextHandle.AddSourceObject(this);
-	
+
+	//GE的效果句柄，包含..
 	const FGameplayEffectSpecHandle EffectSpecHandle =  TargetASC->MakeOutgoingSpec(GameplayEffectClass, ActorLevel,EffectContextHandle);
 	//通过*将get到的原始指针转换为引用。保存在数组以供移除。
 	const FActiveGameplayEffectHandle ActiveEffectHandle= TargetASC->ApplyGameplayEffectSpecToSelf(*EffectSpecHandle.Data.Get());

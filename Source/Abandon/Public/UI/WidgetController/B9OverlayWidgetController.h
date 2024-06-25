@@ -74,7 +74,7 @@ protected:
 	//回调函数,用于在多播中调用；
 	/*void HealthChanged(const FOnAttributeChangeData& Data) const ;
 	void MaxHealthChanged(const FOnAttributeChangeData& Data) const ;
-	void ManaChanged(const FOnAttributeChangeData& Data) const;
+	void ManaChanged(const FOnAttributeChangeData& Data) const; 
 	void MaxManaChanged(const FOnAttributeChangeData& Data) const;*/
 
 	template <typename T>

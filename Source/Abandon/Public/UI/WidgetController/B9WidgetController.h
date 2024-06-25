@@ -8,7 +8,7 @@
 
 class UAttributeSet;
 class UAbilitySystemComponent;
-
+/* 控制器基类 只是基本的控制器结构 */
 
 /**
  *整合控制器的四个关键参数。
@@ -55,9 +55,9 @@ public:
 	virtual void BroadcastInitValues();
 	//用于属性值更新时进行回调。
 	virtual void BindCallbacksToDependencies();
-protected:
+protected :
 
-	//放结构体中
+	//每个需要设置控制器的widget都需要初始化以下内容，故放结构体中方便初始化，Widget控制器向以下四类拿取数据。
 	UPROPERTY(BlueprintReadOnly, Category = "WidgetController")
 	TObjectPtr<UAbilitySystemComponent> AbilitySystemComponent;
 	

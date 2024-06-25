@@ -22,7 +22,9 @@ class ABANDON_API AB9CharacterBase : public ACharacter , public IAbilitySystemIn
 
 public:
 	AB9CharacterBase();
+	//来自于IAbilitySystemInterface的虚函数；
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
+	
 	UAttributeSet* GetAttributeSet() const{return AttributeSet;}
 
 	virtual UAnimMontage* GetHitReactMontage_Implementation() override;
@@ -55,9 +57,10 @@ protected:
 
 	void AddCharacterAbilities();
 
+	//只在服务器处理一些内容；
 	virtual void Die() override;
-
-	//死亡行为需要同步;
+ 
+	//死亡具体行为需要同步;
 	UFUNCTION(NetMulticast,Reliable)
 	virtual void MulticastHandleDeath();
 

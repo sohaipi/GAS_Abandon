@@ -23,7 +23,7 @@ class ABANDON_API AB9HUD : public AHUD
 	GENERATED_BODY()
 public:
 	
-	//初始化用于显示的HUD组件
+	//初始化用于显示的HUD组件，保证只有一个overlay控制器；
 	UB9OverlayWidgetController* GetOverlayWidgetController(const FWidgetControllerParams& WCParams);
 	UB9AttributeMenuWidgetController* GetAttributeMenuWidgetController(const FWidgetControllerParams& WCParams);
 

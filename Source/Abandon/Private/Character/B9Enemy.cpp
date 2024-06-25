@@ -18,6 +18,7 @@ AB9Enemy::AB9Enemy()
 
 	AbilitySystemComponent = CreateDefaultSubobject<UB9AbilitySystemComponent>("AbilitySystemComponent");
 	AbilitySystemComponent->SetIsReplicated(true);
+	//Gameplay Effects are not replicated.Gameplay Cues and Gameplay Tags replicated to all clients.
 	AbilitySystemComponent->SetReplicationMode(EGameplayEffectReplicationMode::Minimal);
 
 	AttributeSet = CreateDefaultSubobject<UB9AttributeSet>("AttributeSet");

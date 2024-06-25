@@ -23,11 +23,12 @@ class ABANDON_API AB9PlayerState : public APlayerState , public IAbilitySystemIn
 	AB9PlayerState();
 public:
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+	//来自ASI接口的获取组件函数。
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 	UAttributeSet* GetAttributeSet() const{return AttributeSet;}
 
 	FORCEINLINE int32 GetPlayerLevel() const{return Level;}  
-protected:
+protected:  
 	//暴露后可以在蓝图中直接用表初始化属性的值等。
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<UAbilitySystemComponent> AbilitySystemComponent;

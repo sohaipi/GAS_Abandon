@@ -13,6 +13,8 @@
 #include "NavigationPath.h"
 #include "NavigationSystem.h"
 #include "Interaction/EnemyInterface.h"
+#include "UI/Widget/DamageTextComponent.h"
+#include "GameFramework/Character.h"
 
 AB9PlayerController::AB9PlayerController()
 {
@@ -24,8 +26,8 @@ AB9PlayerController::AB9PlayerController()
 void AB9PlayerController::BeginPlay()
 {
 	Super::BeginPlay();
+	//增强输入还同时需要在config中开启
 	check(B9Context);
-	
 	if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(GetLocalPlayer()))
 		Subsystem->AddMappingContext(B9Context, 0);
 	
@@ -59,7 +61,21 @@ void AB9PlayerController::PlayerTick(float DeltaTime)
 
 	AutoRun();
 }
-void AB9PlayerController::AutoRun()
+
+void AB9PlayerController::ShowDamageNumber_Implementation(float DamageAmount, ACharacter* TargetCharacter)
+{
+	if (IsValid(TargetCharacter) && DamageTextCompClass)
+	{
+		UDamageTextComponent* DamageText = NewObject<UDamageTextComponent>(TargetCharacter,DamageTextCompClass);
+		//如果是用createdefaultsubobject则会自动注册；
+		DamageText->RegisterComponent();
+		DamageText->AttachToComponent(TargetCharacter->GetRootComponent(),FAttachmentTransformRules::KeepRelativeTransform);
+		DamageText->DetachFromComponent(FDetachmentTransformRules::KeepWorldTransform);
+		DamageText->SetDamageText(DamageAmount);
+	}
+}
+
+void AB9PlayerController::AutoRun() 
 {
 	if (bAutoRunning == false) return;
 	if (APawn* ControlledPawn = GetPawn())

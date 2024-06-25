@@ -33,7 +33,7 @@ public:
 	AB9EffectActor();
 
 	
-	//DEBUG用重叠事件。
+	//DEBUG用重叠事件。  使用oncomponentbeginoverlap委托绑定以下动态函数时，需保证函数与委托的参数一致，故有此定义。
 	/*UFUNCTION()
 	void OnOverlap(UPrimitiveComponent* OverlappedComponent,AActor* OtherActor,UPrimitiveComponent* OtherComp,int32 OtherBodyIndex,bool FromSweep,const FHitResult& SweepResult);
 

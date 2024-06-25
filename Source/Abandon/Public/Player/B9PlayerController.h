@@ -8,6 +8,7 @@
 #include "B9PlayerController.generated.h"
 
 
+class UDamageTextComponent;
 class USplineComponent;
 struct FGameplayTag;
 class UB9InputConfig;
@@ -24,14 +25,17 @@ class ABANDON_API AB9PlayerController : public APlayerController
 {
 	GENERATED_BODY()
 
-
 public:
 	AB9PlayerController();
+	virtual void PlayerTick(float DeltaTime) override;
+
+	//只需在当事客户端执行;
+	UFUNCTION(Client,Reliable)
+	void ShowDamageNumber(float DamageAmount, ACharacter* TargetCharacter);
 
 protected:
 	virtual void BeginPlay() override;
 	virtual void SetupInputComponent() override;
-	virtual void PlayerTick(float DeltaTime) override;
 private:
 	UPROPERTY(EditAnywhere,Category="Input")
 	TObjectPtr<UInputMappingContext> B9Context;
@@ -77,4 +81,8 @@ private:
 	TObjectPtr<USplineComponent> Spline;
 
 	void AutoRun();
+
+
+	UPROPERTY(EditDefaultsOnly,Category = "DamageText")
+	TSubclassOf<UDamageTextComponent> DamageTextCompClass;
 };
