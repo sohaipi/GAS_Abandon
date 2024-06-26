@@ -48,10 +48,7 @@ UB9AttributeMenuWidgetController* UB9_ASC_BlueprintLibrary::GetAttributeMenuWidg
 
 void UB9_ASC_BlueprintLibrary::InitializeDefaultAttributes(const UObject* WorldContextObject,ECharacterClass CharacterClass, float Level,UAbilitySystemComponent* ASC)
 {
-	const AB9GameModeBase* GameModeBase = Cast<AB9GameModeBase>(UGameplayStatics::GetGameMode(WorldContextObject));
-	if (GameModeBase == nullptr) return;
-
-	UB9CharacterClassInfo* CharacterClassInfo = GameModeBase->CharacterClassInfo;
+	UB9CharacterClassInfo* CharacterClassInfo = GetCharacterClassInfo(WorldContextObject);
 	const FCharacterClassDefaultInfo DefaultInfo =  CharacterClassInfo->FindCharacterClassDefaultInfo(CharacterClass);
 
 	AActor* AvatarActor = ASC->GetAvatarActor();
@@ -71,13 +68,18 @@ void UB9_ASC_BlueprintLibrary::InitializeDefaultAttributes(const UObject* WorldC
 
 void UB9_ASC_BlueprintLibrary::GiveStartupAbilities(const UObject* WorldContextObject, UAbilitySystemComponent* ASC)
 {
-	const AB9GameModeBase* GameModeBase = Cast<AB9GameModeBase>(UGameplayStatics::GetGameMode(WorldContextObject));
-	if (GameModeBase == nullptr) return;
-
-	UB9CharacterClassInfo* CharacterClassInfo = GameModeBase->CharacterClassInfo;
+	UB9CharacterClassInfo* CharacterClassInfo = GetCharacterClassInfo(WorldContextObject);
 	for (TSubclassOf<UGameplayAbility> AbilityClass : CharacterClassInfo->CommonAbilities)
 	{
 		FGameplayAbilitySpec AbilitySpec = FGameplayAbilitySpec(AbilityClass,1);
 		ASC->GiveAbility(AbilitySpec);
 	}
+}
+
+UB9CharacterClassInfo* UB9_ASC_BlueprintLibrary::GetCharacterClassInfo(const UObject* WorldContextObject)
+{
+	const AB9GameModeBase* GameModeBase = Cast<AB9GameModeBase>(UGameplayStatics::GetGameMode(WorldContextObject));
+	if (GameModeBase == nullptr) return nullptr;
+
+	return  GameModeBase->CharacterClassInfo;
 }

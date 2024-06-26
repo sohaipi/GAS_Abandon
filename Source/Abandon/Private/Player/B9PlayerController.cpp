@@ -67,7 +67,7 @@ void AB9PlayerController::ShowDamageNumber_Implementation(float DamageAmount, AC
 	if (IsValid(TargetCharacter) && DamageTextCompClass)
 	{
 		UDamageTextComponent* DamageText = NewObject<UDamageTextComponent>(TargetCharacter,DamageTextCompClass);
-		//如果是用createdefaultsubobject则会自动注册；
+		//如果是用createDefaultSubObject则会自动注册；
 		DamageText->RegisterComponent();
 		DamageText->AttachToComponent(TargetCharacter->GetRootComponent(),FAttachmentTransformRules::KeepRelativeTransform);
 		DamageText->DetachFromComponent(FDetachmentTransformRules::KeepWorldTransform);
