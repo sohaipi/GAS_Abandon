@@ -4,6 +4,7 @@
 #include "AbilitySystem/ExecCalc/ExecCalc_Damage.h"
 
 #include "AbilitySystemComponent.h"
+#include "B9AbilitySystemTypes.h"
 #include "B9GameplayTags.h"
 #include "AbilitySystem/B9AttributeSet.h"
 #include "AbilitySystem/B9_ASC_BlueprintLibrary.h"
@@ -105,6 +106,10 @@ void UExecCalc_Damage::Execute_Implementation(const FGameplayEffectCustomExecuti
 	
 	//block成功减伤一半；
 	const bool bBlock = FMath::RandRange(1,100) < TargetBlockChance;
+
+	FGameplayEffectContextHandle EffectContextHandle = GESpec.GetContext();
+	UB9_ASC_BlueprintLibrary::SetIsBlockedHit(EffectContextHandle,bBlock);
+	
 	Damage = bBlock ? Damage/2.f : Damage; 
 	//护甲穿透无视目标护甲百分比 
 	const float EffectArmor = TargetArmor *= (100 - SourceArmorPenetration * ArmorPenetrationCoefficient) / 100.f;
@@ -112,6 +117,7 @@ void UExecCalc_Damage::Execute_Implementation(const FGameplayEffectCustomExecuti
 	//暴击计算
 	const float EffectiveCriticalHitChance = SourceCriticalHitChance - TargetCriticalHitResistance * CriticalHitResistanceCoefficient ;
 	const bool bCriticalHit = FMath::RandRange(1,100) < EffectiveCriticalHitChance ;
+	UB9_ASC_BlueprintLibrary::SetIsCriticalHit(EffectContextHandle,bCriticalHit);
 	Damage = bCriticalHit ? 2.f * Damage + SourceCriticalHitDamage : Damage;
 	
 	const FGameplayModifierEvaluatedData EvaluatedData(DamageStatics().BlockChanceProperty,EGameplayModOp::Additive,Damage);

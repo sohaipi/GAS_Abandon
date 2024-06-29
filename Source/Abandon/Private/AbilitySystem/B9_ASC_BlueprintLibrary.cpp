@@ -4,6 +4,7 @@
 #include "AbilitySystem/B9_ASC_BlueprintLibrary.h"
 
 #include "AbilitySystemComponent.h"
+#include "B9AbilitySystemTypes.h"
 #include "Game/B9GameModeBase.h"
 #include "Kismet/GameplayStatics.h"
 #include "Player/B9PlayerState.h"
@@ -82,4 +83,39 @@ UB9CharacterClassInfo* UB9_ASC_BlueprintLibrary::GetCharacterClassInfo(const UOb
 	if (GameModeBase == nullptr) return nullptr;
 
 	return  GameModeBase->CharacterClassInfo;
+}
+
+bool UB9_ASC_BlueprintLibrary::IsBlockedHit(const FGameplayEffectContextHandle& EffectContextHandle)
+{
+	if (const FB9GameplayEffectContext* B9EffectContext = static_cast<const FB9GameplayEffectContext*>(EffectContextHandle.Get()))
+	{
+		return B9EffectContext->IsBlockedHit();
+	}
+	return false;
+}
+
+bool UB9_ASC_BlueprintLibrary::IsCriticalHit(const FGameplayEffectContextHandle& EffectContextHandle)
+{
+	if (const FB9GameplayEffectContext* B9EffectContext = static_cast<const FB9GameplayEffectContext*>(EffectContextHandle.Get()))
+	{
+		return B9EffectContext->IsCriticalHit();
+	}
+	return false;
+}
+
+void UB9_ASC_BlueprintLibrary::SetIsBlockedHit(FGameplayEffectContextHandle& EffectContextHandle, bool bInIsBlockedHit)
+{
+	if (FB9GameplayEffectContext* B9EffectContext = static_cast<FB9GameplayEffectContext*>(EffectContextHandle.Get()))
+	{
+		B9EffectContext->SetIsBlockedHit(bInIsBlockedHit);
+	}
+}
+
+void UB9_ASC_BlueprintLibrary::SetIsCriticalHit(FGameplayEffectContextHandle& EffectContextHandle,
+	bool bInIsCriticalHit)
+{
+	if (FB9GameplayEffectContext* B9EffectContext = static_cast<FB9GameplayEffectContext*>(EffectContextHandle.Get()))
+	{
+		B9EffectContext->SetIsCriticalHit(bInIsCriticalHit);
+	}
 }

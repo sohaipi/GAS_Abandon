@@ -205,5 +205,5 @@ private:
 	/*UPROPERTY()
 	FEffectSourceProperties EffectSourceProperties;*/
 
-	void ShowFloatingText(const FEffectSourceProperties& Props,float Damage)const ;
+	void ShowFloatingText(const FEffectSourceProperties& Props,float Damage,bool bBlockedHit,bool bCriticalHit)const ;
 };

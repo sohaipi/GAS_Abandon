@@ -8,6 +8,8 @@
 #include "GameFramework/Character.h"
 #include "Net/UnrealNetwork.h"
 #include "B9GameplayTags.h"
+#include "AbilitySystem/B9AbilitySystemComponent.h"
+#include "AbilitySystem/B9_ASC_BlueprintLibrary.h"
 #include "Interaction/CombatInterface.h"
 #include "Kismet/GameplayStatics.h"
 #include "Player/B9PlayerController.h"
@@ -155,11 +157,14 @@ void UB9AttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallback
 				TagContainer.AddTag(FB9GameplayTags::Get().Effect_Ability_HitReact);
 				Props.TargetASC->TryActivateAbilitiesByTag(TagContainer);
 			}
-			ShowFloatingText(Props,LocalIncomingDamage);
+			;
+			const bool bBlock = UB9_ASC_BlueprintLibrary::IsBlockedHit(Props.EffectContextHandle);
+			const bool bCritical = UB9_ASC_BlueprintLibrary::IsCriticalHit(Props.EffectContextHandle);
+			ShowFloatingText(Props,LocalIncomingDamage,bBlock,bCritical);
 		}
 	}
 }
-void UB9AttributeSet::ShowFloatingText(const FEffectSourceProperties& Props, float Damage) const
+void UB9AttributeSet::ShowFloatingText(const FEffectSourceProperties& Props, float Damage, bool bBlockedHit, bool bCriticalHit) const
 {
 	if (Props.SourceCharacter != Props.TargetCharacter)
 	{
@@ -183,7 +188,7 @@ void UB9AttributeSet::OnRep_Intelligence(const FGameplayAttributeData& OldIntell
 void UB9AttributeSet::OnRep_Resilience(const FGameplayAttributeData& OldResilience) const
 {
 	GAMEPLAYATTRIBUTE_REPNOTIFY(UB9AttributeSet,Resilience,OldResilience);
-}
+} 
 
 void UB9AttributeSet::OnRep_Vigor(const FGameplayAttributeData& OldVigor) const
 {
