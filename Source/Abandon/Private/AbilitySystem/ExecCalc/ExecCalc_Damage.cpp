@@ -18,11 +18,19 @@ struct B9DamageStatics
 	DECLARE_ATTRIBUTE_CAPTUREDEF(BlockChance);
 	DECLARE_ATTRIBUTE_CAPTUREDEF(Armor);
 	DECLARE_ATTRIBUTE_CAPTUREDEF(ArmorPenetration);
+	
+	DECLARE_ATTRIBUTE_CAPTUREDEF(CriticalHitChance);
+	DECLARE_ATTRIBUTE_CAPTUREDEF(CriticalHitResistance);
+	DECLARE_ATTRIBUTE_CAPTUREDEF(CriticalHitDamage);
 	B9DamageStatics()
 	{
 		DEFINE_ATTRIBUTE_CAPTUREDEF(UB9AttributeSet,BlockChance,Target,false);
 		DEFINE_ATTRIBUTE_CAPTUREDEF(UB9AttributeSet,Armor,Target,false);
-		DEFINE_ATTRIBUTE_CAPTUREDEF(UB9AttributeSet,ArmorPenetration,Target,true);
+		DEFINE_ATTRIBUTE_CAPTUREDEF(UB9AttributeSet,ArmorPenetration,Source,true);
+		
+		DEFINE_ATTRIBUTE_CAPTUREDEF(UB9AttributeSet,CriticalHitChance,Source,false);
+		DEFINE_ATTRIBUTE_CAPTUREDEF(UB9AttributeSet,CriticalHitResistance,Target,false);
+		DEFINE_ATTRIBUTE_CAPTUREDEF(UB9AttributeSet,CriticalHitDamage,Source,false);
 	}
 };
 
@@ -38,6 +46,10 @@ UExecCalc_Damage::UExecCalc_Damage()
 	RelevantAttributesToCapture.Add(B9DamageStatics().BlockChanceDef);
 	RelevantAttributesToCapture.Add(B9DamageStatics().ArmorDef);
 	RelevantAttributesToCapture.Add(B9DamageStatics().ArmorPenetrationDef);
+
+	RelevantAttributesToCapture.Add(B9DamageStatics().CriticalHitChanceDef);
+	RelevantAttributesToCapture.Add(B9DamageStatics().CriticalHitResistanceDef);
+	RelevantAttributesToCapture.Add(B9DamageStatics().CriticalHitDamageDef);
 }
 
 //计算实体
@@ -73,17 +85,34 @@ void UExecCalc_Damage::Execute_Implementation(const FGameplayEffectCustomExecuti
 	ExecutionParams.AttemptCalculateCapturedAttributeMagnitude(DamageStatics().ArmorPenetrationDef,EvaluateParameters,SourceArmorPenetration);
 	SourceArmorPenetration = FMath::Max<float>(SourceArmorPenetration,0.f);
 
+	float SourceCriticalHitChance = 0.f;
+	ExecutionParams.AttemptCalculateCapturedAttributeMagnitude(DamageStatics().CriticalHitChanceDef,EvaluateParameters,SourceCriticalHitChance);
+	SourceCriticalHitChance = FMath::Max<float>(SourceCriticalHitChance,0.f);
+	float TargetCriticalHitResistance = 0.f;
+	ExecutionParams.AttemptCalculateCapturedAttributeMagnitude(DamageStatics().CriticalHitResistanceDef,EvaluateParameters,TargetCriticalHitResistance);
+	TargetCriticalHitResistance = FMath::Max<float>(TargetCriticalHitResistance,0.f);
+	float SourceCriticalHitDamage = 0.f;
+	ExecutionParams.AttemptCalculateCapturedAttributeMagnitude(DamageStatics().CriticalHitDamageDef,EvaluateParameters,SourceCriticalHitDamage);
+	SourceCriticalHitDamage = FMath::Max<float>(SourceCriticalHitDamage,0.f);  
+
 	const UB9CharacterClassInfo* ClassInfo = UB9_ASC_BlueprintLibrary::GetCharacterClassInfo(SourceAvatar);
 	const FRealCurve* ArmorPenetrationCurve = ClassInfo->DamageCalculationCoefficients->FindCurve(FName("ArmorPenetration"),FString());
 	const float ArmorPenetrationCoefficient = ArmorPenetrationCurve->Eval(SourceCombatInterface->GetPlayerLevel());
 	const FRealCurve* EffectiveArmorCurve = ClassInfo->DamageCalculationCoefficients->FindCurve(FName("EffectiveArmor"),FString());
 	const float EffectiveArmorCurveCoefficient = EffectiveArmorCurve->Eval(TargetCombatInterface->GetPlayerLevel());
+	const FRealCurve* CriticalHitResistanceCurve = ClassInfo->DamageCalculationCoefficients->FindCurve(FName("CriticalHitResistance"),FString());
+	const float CriticalHitResistanceCoefficient = CriticalHitResistanceCurve->Eval(TargetCombatInterface->GetPlayerLevel());
+	
 	//block成功减伤一半；
 	const bool bBlock = FMath::RandRange(1,100) < TargetBlockChance;
-	Damage = bBlock ? Damage/2.f : Damage;
-	//护甲穿透无视目标护甲百分比
+	Damage = bBlock ? Damage/2.f : Damage; 
+	//护甲穿透无视目标护甲百分比 
 	const float EffectArmor = TargetArmor *= (100 - SourceArmorPenetration * ArmorPenetrationCoefficient) / 100.f;
 	Damage *= (100 - EffectArmor * EffectiveArmorCurveCoefficient)/100.f;
+	//暴击计算
+	const float EffectiveCriticalHitChance = SourceCriticalHitChance - TargetCriticalHitResistance * CriticalHitResistanceCoefficient ;
+	const bool bCriticalHit = FMath::RandRange(1,100) < EffectiveCriticalHitChance ;
+	Damage = bCriticalHit ? 2.f * Damage + SourceCriticalHitDamage : Damage;
 	
 	const FGameplayModifierEvaluatedData EvaluatedData(DamageStatics().BlockChanceProperty,EGameplayModOp::Additive,Damage);
 	OutExecutionOutput.AddOutputModifier(EvaluatedData);
