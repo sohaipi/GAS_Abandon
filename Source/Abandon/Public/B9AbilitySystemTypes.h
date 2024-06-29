@@ -17,6 +17,20 @@ public:
 	{
 		return FGameplayEffectContext::StaticStruct();
 	}
+
+	/** Creates a copy of this context, used to duplicate for later modifications */
+	virtual FGameplayEffectContext* Duplicate() const
+	{
+		FGameplayEffectContext* NewContext = new FGameplayEffectContext();
+		*NewContext = *this;
+		if (GetHitResult())
+		{
+			// Does a deep copy of the hit result
+			NewContext->AddHitResult(*GetHitResult(), true);
+		}
+		return NewContext;
+	}
+	
 	//网络同步序列化
 	/** Custom serialization, subclasses must override this */
 	virtual bool NetSerialize(FArchive& Ar, class UPackageMap* Map, bool& bOutSuccess);
@@ -32,4 +46,15 @@ protected:
 	bool bIsBlockedHit = false;
 	UPROPERTY()
 	bool bIsCriticalHit = false;
+
+	
+};
+template<>
+	struct TStructOpsTypeTraits< FB9GameplayEffectContext > : public TStructOpsTypeTraitsBase2< FB9GameplayEffectContext >
+{
+	enum
+	{
+		WithNetSerializer = true,
+		WithCopy = true		// Necessary so that TSharedPtr<FHitResult> Data is copied around
+	};
 };
