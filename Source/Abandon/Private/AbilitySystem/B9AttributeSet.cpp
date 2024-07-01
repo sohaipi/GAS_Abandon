@@ -34,6 +34,10 @@ UB9AttributeSet::UB9AttributeSet()
 	TagsToAttributes.Add(GameplayTags.Attribute_Secondary_ManaRegeneration ,GetManaRegenerationAttribute);
 	TagsToAttributes.Add(GameplayTags.Attribute_Secondary_MaxHealth ,GetMaxHealthAttribute);
 	TagsToAttributes.Add(GameplayTags.Attribute_Secondary_MaxMana ,GetMaxManaAttribute);
+	TagsToAttributes.Add(GameplayTags.Attribute_Resistance_Fire ,GetFireResistanceAttribute);
+	TagsToAttributes.Add(GameplayTags.Attribute_Resistance_Lightning ,GetLightningResistanceAttribute);
+	TagsToAttributes.Add(GameplayTags.Attribute_Resistance_Arcane ,GetArcaneResistanceAttribute);
+	TagsToAttributes.Add(GameplayTags.Attribute_Resistance_Physical ,GetPhysicalResistanceAttribute);
 	//Delegate版本
 	/*FAttributeSiganature StrengthDelegate;
 	StrengthDelegate.BindStatic(GetStrengthAttribute);
@@ -62,6 +66,11 @@ void UB9AttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutL
 	DOREPLIFETIME_CONDITION_NOTIFY(UB9AttributeSet,CriticalHitResistance,COND_None,REPNOTIFY_Always);
 	DOREPLIFETIME_CONDITION_NOTIFY(UB9AttributeSet,HealthRegeneration,COND_None,REPNOTIFY_Always);
 	DOREPLIFETIME_CONDITION_NOTIFY(UB9AttributeSet,ManaRegeneration,COND_None,REPNOTIFY_Always);
+	
+	DOREPLIFETIME_CONDITION_NOTIFY(UB9AttributeSet,FireResistance,COND_None,REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UB9AttributeSet,LightningResistance,COND_None,REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UB9AttributeSet,ArcaneResistance,COND_None,REPNOTIFY_Always);
+	DOREPLIFETIME_CONDITION_NOTIFY(UB9AttributeSet,PhysicalResistance,COND_None,REPNOTIFY_Always);
 }
 
 //Pre之后，数值仍可能被更改，不能以最终值看待。对修饰符将导致的结果进行限制。
@@ -254,4 +263,26 @@ void UB9AttributeSet::OnRep_ManaRegeneration(const FGameplayAttributeData& OldMa
 {
 	GAMEPLAYATTRIBUTE_REPNOTIFY(UB9AttributeSet,ManaRegeneration,OldManaRegeneration);
 }
+
+void UB9AttributeSet::OnRep_FireResistance(const FGameplayAttributeData& OldFireResistance) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UB9AttributeSet,FireResistance,OldFireResistance);
+}
+
+void UB9AttributeSet::OnRep_LightningResistance(const FGameplayAttributeData& OldLightningResistance) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UB9AttributeSet,LightningResistance,OldLightningResistance);
+}
+
+void UB9AttributeSet::OnRep_ArcaneResistance(const FGameplayAttributeData& OldArcaneResistance) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UB9AttributeSet,ArcaneResistance,OldArcaneResistance);
+}
+
+void UB9AttributeSet::OnRep_PhysicalResistance(const FGameplayAttributeData& OldPhysicalResistance) const
+{
+	GAMEPLAYATTRIBUTE_REPNOTIFY(UB9AttributeSet,PhysicalResistance,OldPhysicalResistance);
+}
+
+
 
