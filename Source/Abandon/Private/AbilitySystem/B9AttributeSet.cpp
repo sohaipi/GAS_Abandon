@@ -157,7 +157,6 @@ void UB9AttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallback
 				TagContainer.AddTag(FB9GameplayTags::Get().Effect_Ability_HitReact);
 				Props.TargetASC->TryActivateAbilitiesByTag(TagContainer);
 			}
-			;
 			const bool bBlock = UB9_ASC_BlueprintLibrary::IsBlockedHit(Props.EffectContextHandle);
 			const bool bCritical = UB9_ASC_BlueprintLibrary::IsCriticalHit(Props.EffectContextHandle);
 			ShowFloatingText(Props,LocalIncomingDamage,bBlock,bCritical);
@@ -170,7 +169,7 @@ void UB9AttributeSet::ShowFloatingText(const FEffectSourceProperties& Props, flo
 	{
 		if (AB9PlayerController* PC = Cast<AB9PlayerController>(UGameplayStatics::GetPlayerController(Props.SourceCharacter,0)) )
 		{
-			PC->ShowDamageNumber(Damage,Props.TargetCharacter);
+			PC->ShowDamageNumber(Damage,Props.TargetCharacter,bBlockedHit,bCriticalHit);
 		}
 	}
 }

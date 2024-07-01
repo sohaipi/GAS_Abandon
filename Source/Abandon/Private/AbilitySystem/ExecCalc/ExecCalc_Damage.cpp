@@ -120,6 +120,6 @@ void UExecCalc_Damage::Execute_Implementation(const FGameplayEffectCustomExecuti
 	UB9_ASC_BlueprintLibrary::SetIsCriticalHit(EffectContextHandle,bCriticalHit);
 	Damage = bCriticalHit ? 2.f * Damage + SourceCriticalHitDamage : Damage;
 	
-	const FGameplayModifierEvaluatedData EvaluatedData(DamageStatics().BlockChanceProperty,EGameplayModOp::Additive,Damage);
+	const FGameplayModifierEvaluatedData EvaluatedData(UB9AttributeSet::GetIncomingDamageAttribute(),EGameplayModOp::Additive,Damage);
 	OutExecutionOutput.AddOutputModifier(EvaluatedData);
 }

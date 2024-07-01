@@ -31,7 +31,7 @@ public:
 
 	//只需在当事客户端执行;
 	UFUNCTION(Client,Reliable)
-	void ShowDamageNumber(float DamageAmount, ACharacter* TargetCharacter);
+	void ShowDamageNumber(float DamageAmount, ACharacter* TargetCharacter,bool bBlockedHit,bool bCriticalHit);
 
 protected:
 	virtual void BeginPlay() override;
