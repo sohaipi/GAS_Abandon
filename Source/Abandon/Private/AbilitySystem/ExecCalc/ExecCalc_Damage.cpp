@@ -74,7 +74,12 @@ void UExecCalc_Damage::Execute_Implementation(const FGameplayEffectCustomExecuti
 	EvaluateParameters.TargetTags = TargetTags;
 
 	//数值获取；
-	float Damage = GESpec.GetSetByCallerMagnitude(FB9GameplayTags::Get().Damage);
+	float Damage = 0;
+	for (FGameplayTag DamageTypeTag:FB9GameplayTags::Get().DamageTypes)
+	{
+		const float DamageTypeValue = GESpec.GetSetByCallerMagnitude(DamageTypeTag);
+		Damage += DamageTypeValue;
+	}
 	
 	float TargetBlockChance = 0.f;
 	ExecutionParams.AttemptCalculateCapturedAttributeMagnitude(DamageStatics().BlockChanceDef,EvaluateParameters,TargetBlockChance);

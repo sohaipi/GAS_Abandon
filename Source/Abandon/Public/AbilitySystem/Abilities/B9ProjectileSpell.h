@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "AbilitySystem/Abilities/B9GameplayAbility.h"
+#include "B9DamageGameplayAbility.h"
 #include "B9ProjectileSpell.generated.h"
 
 class AB9Projectile;
@@ -11,7 +11,7 @@ class AB9Projectile;
  * 
  */
 UCLASS()
-class ABANDON_API UB9ProjectileSpell : public UB9GameplayAbility
+class ABANDON_API UB9ProjectileSpell : public UB9DamageGameplayAbility
 {
 	GENERATED_BODY()
 
@@ -24,10 +24,7 @@ protected:
 	
 	UPROPERTY(EditAnywhere,BlueprintReadOnly)
 	TSubclassOf<AB9Projectile> ProjectileClass;
-
-	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly)
-	TSubclassOf<UGameplayEffect> DamageEffectClass;
-
+	
 	UFUNCTION(BlueprintCallable,Category = "Projectile")
 	void SpawnProjectile(const FVector& ProjectileTargetLocation);
 	

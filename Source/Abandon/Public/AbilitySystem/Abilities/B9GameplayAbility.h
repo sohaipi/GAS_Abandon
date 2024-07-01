@@ -17,8 +17,4 @@ class ABANDON_API UB9GameplayAbility : public UGameplayAbility
 public:
 	UPROPERTY(EditDefaultsOnly,Category = "Input")
 	FGameplayTag StartupInputTag;
-
-	//默认所有此类都有伤害，无伤害的使用父类；
-	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly,Category = "Damage")
-	FScalableFloat Damage;
 };
