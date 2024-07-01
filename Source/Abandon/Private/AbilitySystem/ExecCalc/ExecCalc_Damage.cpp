@@ -75,9 +75,9 @@ void UExecCalc_Damage::Execute_Implementation(const FGameplayEffectCustomExecuti
 
 	//数值获取；
 	float Damage = 0;
-	for (FGameplayTag DamageTypeTag:FB9GameplayTags::Get().DamageTypes)
+	for (const TTuple<FGameplayTag, FGameplayTag>& Pair:FB9GameplayTags::Get().DamageTypesToResistance)
 	{
-		const float DamageTypeValue = GESpec.GetSetByCallerMagnitude(DamageTypeTag);
+		const float DamageTypeValue = GESpec.GetSetByCallerMagnitude(Pair.Key);
 		Damage += DamageTypeValue;
 	}
 	

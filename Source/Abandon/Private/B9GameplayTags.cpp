@@ -47,6 +47,16 @@ void FB9GameplayTags::InitializeNativeGameplayTags()
 	B9GameplayTags.Attribute_Secondary_MaxMana = UGameplayTagsManager::Get().AddNativeGameplayTag(
 		FName("Attributes.Secondary.MaxMana"),FString("MaxMana"));
 
+	//Resistance Attributes
+	B9GameplayTags.Attribute_Resistance_Fire = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Attributes.Resistance.Fire"),FString("Reduces Fire damage taken"));
+	B9GameplayTags.Attribute_Resistance_Lightning = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Attributes.Resistance.Lightning"),FString("Reduces Lightning damage taken"));
+	B9GameplayTags.Attribute_Resistance_Arcane = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Attributes.Resistance.Arcane"),FString("Reduces Arcane damage taken"));
+	B9GameplayTags.Attribute_Resistance_Physical = UGameplayTagsManager::Get().AddNativeGameplayTag(
+		FName("Attributes.Resistance.Physical"),FString("Reduces Physical damage taken"));
+
 	//Input Tags
 	B9GameplayTags.InputTag_LMB = UGameplayTagsManager::Get().AddNativeGameplayTag(
 		FName("InputTag.LMB"),FString("InputTag:LMB"));
@@ -64,10 +74,26 @@ void FB9GameplayTags::InitializeNativeGameplayTags()
 	//Abilities Tags
 	B9GameplayTags.Damage = UGameplayTagsManager::Get().AddNativeGameplayTag(
 	FName("Damage"),FString("Damage"));
+	
+	/*
+	 *伤害类型
+	 */
 	B9GameplayTags.Damage_Fire = UGameplayTagsManager::Get().AddNativeGameplayTag(
 	FName("Damage.Fire"),FString("Fire Damage Type"));
+	B9GameplayTags.Damage_Lightning = UGameplayTagsManager::Get().AddNativeGameplayTag(
+	FName("Damage.Lightning"),FString("Lightning Damage Type"));
+	B9GameplayTags.Damage_Arcane = UGameplayTagsManager::Get().AddNativeGameplayTag(
+	FName("Damage.Arcane"),FString("Arcane Damage Type"));
+	B9GameplayTags.Damage_Physical = UGameplayTagsManager::Get().AddNativeGameplayTag(
+	FName("Damage.Physical"),FString("Physical Damage Type"));
 
-	B9GameplayTags.DamageTypes.Add(B9GameplayTags.Damage_Fire);
+	/*
+	 *元素抗性与元素伤害的对照关系；
+	 */
+	B9GameplayTags.DamageTypesToResistance.Add(B9GameplayTags.Damage_Fire,B9GameplayTags.Attribute_Resistance_Fire);
+	B9GameplayTags.DamageTypesToResistance.Add(B9GameplayTags.Damage_Lightning,B9GameplayTags.Attribute_Resistance_Lightning);
+	B9GameplayTags.DamageTypesToResistance.Add(B9GameplayTags.Damage_Arcane,B9GameplayTags.Attribute_Resistance_Arcane);
+	B9GameplayTags.DamageTypesToResistance.Add(B9GameplayTags.Damage_Physical,B9GameplayTags.Attribute_Resistance_Physical);
 	
 	B9GameplayTags.Effect_Ability_HitReact = UGameplayTagsManager::Get().AddNativeGameplayTag(
 	FName("Effect.Ability.HitReact"),FString("Damage React"));
