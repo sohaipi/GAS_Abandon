@@ -32,7 +32,9 @@ void AB9Enemy::BeginPlay()
 	//由于挂在PAWN上，所以只需简单得在beginplay上做ASC的初始化；
 	Super::BeginPlay();
 
-	InitAbilityActorInfo();
+	//只在服务器上，不然客户端没GameMode会空指针崩溃；
+	if (HasAuthority()) { InitAbilityActorInfo(); }
+	
 	GetCharacterMovement()->MaxWalkSpeed = BaseWalkSpeed;
 	UB9_ASC_BlueprintLibrary::GiveStartupAbilities(this,AbilitySystemComponent);
 
@@ -99,7 +101,7 @@ void AB9Enemy::InitAbilityActorInfo()
 	AbilitySystemComponent->InitAbilityActorInfo(this,this);
 	Cast<UB9AbilitySystemComponent>(AbilitySystemComponent)->AbilityActorInfoSet();
 
-	InitDefaultAttribute();
+	if (HasAuthority())	{InitDefaultAttribute(); }
 }
 
 void AB9Enemy::InitDefaultAttribute() const

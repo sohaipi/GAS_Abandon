@@ -28,7 +28,7 @@ void UB9ProjectileSpell::SpawnProjectile(const FVector& ProjectileTargetLocation
 	{
 		const FVector SocketLocation = CombatInterface->GetCombatTipLocation();
 		FRotator Rotation = (ProjectileTargetLocation - SocketLocation).Rotation();
-		Rotation.Pitch = 0.f;
+		/*Rotation.Pitch = 0.f;*/
 		FTransform SpawnTransform;
 		SpawnTransform.SetLocation(SocketLocation);
 		SpawnTransform.SetRotation(Rotation.Quaternion());

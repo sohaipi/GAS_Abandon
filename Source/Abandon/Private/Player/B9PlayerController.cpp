@@ -64,7 +64,7 @@ void AB9PlayerController::PlayerTick(float DeltaTime)
 
 void AB9PlayerController::ShowDamageNumber_Implementation(float DamageAmount, ACharacter* TargetCharacter,bool bBlockedHit,bool bCriticalHit)
 {
-	if (IsValid(TargetCharacter) && DamageTextCompClass)
+	if (IsValid(TargetCharacter) && DamageTextCompClass && IsLocalController())
 	{
 		UDamageTextComponent* DamageText = NewObject<UDamageTextComponent>(TargetCharacter,DamageTextCompClass);
 		//如果是用createDefaultSubObject则会自动注册；

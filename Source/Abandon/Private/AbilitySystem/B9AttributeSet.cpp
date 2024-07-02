@@ -143,6 +143,7 @@ void UB9AttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallback
 	{
 		SetMana(FMath::Clamp(GetMana(),0.f,GetMaxMana()));
 	}
+	//IncomingDamageAttribute是元属性，只在服务器上更新，故下列部分只在服务器生效。
 	if (Data.EvaluatedData.Attribute == GetIncomingDamageAttribute())
 	{
 		const float	LocalIncomingDamage = GetIncomingDamage();
@@ -176,7 +177,9 @@ void UB9AttributeSet::ShowFloatingText(const FEffectSourceProperties& Props, flo
 {
 	if (Props.SourceCharacter != Props.TargetCharacter)
 	{
-		if (AB9PlayerController* PC = Cast<AB9PlayerController>(UGameplayStatics::GetPlayerController(Props.SourceCharacter,0)) )
+		if(AB9PlayerController* PC = Cast<AB9PlayerController>(Props.SourceCharacter->Controller))
+			/** 下面只会拿到服务器的PC。
+		/*if (AB9PlayerController* PC = Cast<AB9PlayerController>(UGameplayStatics::GetPlayerController(Props.SourceCharacter,0)) )*/
 		{
 			PC->ShowDamageNumber(Damage,Props.TargetCharacter,bBlockedHit,bCriticalHit);
 		}
