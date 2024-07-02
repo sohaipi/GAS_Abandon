@@ -23,6 +23,15 @@ struct B9DamageStatics
 	DECLARE_ATTRIBUTE_CAPTUREDEF(CriticalHitChance);
 	DECLARE_ATTRIBUTE_CAPTUREDEF(CriticalHitResistance);
 	DECLARE_ATTRIBUTE_CAPTUREDEF(CriticalHitDamage);
+	
+	DECLARE_ATTRIBUTE_CAPTUREDEF(FireResistance);
+	DECLARE_ATTRIBUTE_CAPTUREDEF(LightningResistance);
+	DECLARE_ATTRIBUTE_CAPTUREDEF(ArcaneResistance);
+	DECLARE_ATTRIBUTE_CAPTUREDEF(PhysicalResistance);
+
+	//TAG与DEF的对照表；
+	TMap<FGameplayTag,FGameplayEffectAttributeCaptureDefinition> TagsToCaptureDefs;
+	
 	B9DamageStatics()
 	{
 		DEFINE_ATTRIBUTE_CAPTUREDEF(UB9AttributeSet,BlockChance,Target,false);
@@ -32,6 +41,25 @@ struct B9DamageStatics
 		DEFINE_ATTRIBUTE_CAPTUREDEF(UB9AttributeSet,CriticalHitChance,Source,false);
 		DEFINE_ATTRIBUTE_CAPTUREDEF(UB9AttributeSet,CriticalHitResistance,Target,false);
 		DEFINE_ATTRIBUTE_CAPTUREDEF(UB9AttributeSet,CriticalHitDamage,Source,false);
+		
+		DEFINE_ATTRIBUTE_CAPTUREDEF(UB9AttributeSet,FireResistance,Target,false);
+		DEFINE_ATTRIBUTE_CAPTUREDEF(UB9AttributeSet,LightningResistance,Target,false);
+		DEFINE_ATTRIBUTE_CAPTUREDEF(UB9AttributeSet,ArcaneResistance,Target,false);
+		DEFINE_ATTRIBUTE_CAPTUREDEF(UB9AttributeSet,PhysicalResistance,Target,false);
+
+		static const FB9GameplayTags& Tags = FB9GameplayTags::Get();
+		TagsToCaptureDefs.Add(Tags.Attribute_Secondary_Armor,ArmorDef);
+		TagsToCaptureDefs.Add(Tags.Attribute_Secondary_BlockChance,BlockChanceDef);
+		TagsToCaptureDefs.Add(Tags.Attribute_Secondary_ArmorPenetration,ArmorPenetrationDef);
+		
+		TagsToCaptureDefs.Add(Tags.Attribute_Secondary_CriticalHitChance,CriticalHitChanceDef);
+		TagsToCaptureDefs.Add(Tags.Attribute_Secondary_CriticalHitResistance,CriticalHitResistanceDef);
+		TagsToCaptureDefs.Add(Tags.Attribute_Secondary_CriticalHitDamage,CriticalHitDamageDef);
+		
+		TagsToCaptureDefs.Add(Tags.Attribute_Resistance_Fire,FireResistanceDef);
+		TagsToCaptureDefs.Add(Tags.Attribute_Resistance_Lightning,LightningResistanceDef);
+		TagsToCaptureDefs.Add(Tags.Attribute_Resistance_Arcane,ArcaneResistanceDef);
+		TagsToCaptureDefs.Add(Tags.Attribute_Resistance_Physical,PhysicalResistanceDef);
 	}
 };
 
@@ -51,9 +79,15 @@ UExecCalc_Damage::UExecCalc_Damage()
 	RelevantAttributesToCapture.Add(B9DamageStatics().CriticalHitChanceDef);
 	RelevantAttributesToCapture.Add(B9DamageStatics().CriticalHitResistanceDef);
 	RelevantAttributesToCapture.Add(B9DamageStatics().CriticalHitDamageDef);
+	
+	RelevantAttributesToCapture.Add(B9DamageStatics().FireResistanceDef);
+	RelevantAttributesToCapture.Add(B9DamageStatics().LightningResistanceDef);
+	RelevantAttributesToCapture.Add(B9DamageStatics().ArcaneResistanceDef);
+	RelevantAttributesToCapture.Add(B9DamageStatics().PhysicalResistanceDef);
+	
 }
 
-//计算实体
+//计算部分；
 void UExecCalc_Damage::Execute_Implementation(const FGameplayEffectCustomExecutionParameters& ExecutionParams,
 	FGameplayEffectCustomExecutionOutput& OutExecutionOutput) const
 {
@@ -77,7 +111,18 @@ void UExecCalc_Damage::Execute_Implementation(const FGameplayEffectCustomExecuti
 	float Damage = 0;
 	for (const TTuple<FGameplayTag, FGameplayTag>& Pair:FB9GameplayTags::Get().DamageTypesToResistance)
 	{
-		const float DamageTypeValue = GESpec.GetSetByCallerMagnitude(Pair.Key);
+		const FGameplayTag DamageTypeTag = Pair.Key;
+		const FGameplayTag ResistanceTag = Pair.Value;
+
+		checkf(B9DamageStatics().TagsToCaptureDefs.Contains(ResistanceTag),TEXT("在伤害执行器的标签对照表中获取不到属性：[%s]"),*ResistanceTag.ToString());
+		const FGameplayEffectAttributeCaptureDefinition CaptureDefinition = DamageStatics().TagsToCaptureDefs[ResistanceTag];
+		float DamageTypeValue = GESpec.GetSetByCallerMagnitude(Pair.Key);
+		
+		float Resistance = 0.f;
+		ExecutionParams.AttemptCalculateCapturedAttributeMagnitude(CaptureDefinition,EvaluateParameters,Resistance);
+		Resistance = FMath::Clamp<float>(Resistance,0.f,100.f);
+
+		DamageTypeValue *= (100.f - Resistance)/100.f;
 		Damage += DamageTypeValue;
 	}
 	
