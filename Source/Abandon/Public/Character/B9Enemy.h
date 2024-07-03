@@ -9,6 +9,8 @@
 #include "AbilitySystem/Data/B9CharacterClassInfo.h"
 #include "B9Enemy.generated.h"
 
+class UBehaviorTree;
+class AB9AIController;
 class UWidgetComponent;
 /**
  * 
@@ -19,7 +21,7 @@ class ABANDON_API AB9Enemy : public AB9CharacterBase , public IEnemyInterface
 	GENERATED_BODY()
 public:
 	AB9Enemy();
-
+	virtual void PossessedBy(AController* NewController) override;
 	// Enemy Interface **
 	virtual void BeginPlay() override;
 	virtual void HighlightActor() override;
@@ -60,4 +62,9 @@ protected:
 	float BaseWalkSpeed = 100.f;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly,Category ="Combat")
 	float LifeSpan = 5.0f;
+
+	UPROPERTY(EditAnywhere, Category = "AI")
+	TObjectPtr<UBehaviorTree> BehaviorTree;
+	UPROPERTY()
+	TObjectPtr<AB9AIController> B9AIController;
 };

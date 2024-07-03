@@ -10,6 +10,9 @@
 #include "Components/WidgetComponent.h"
 #include "UI/Widget/B9UserWidget.h"
 #include "B9GameplayTags.h"
+#include "AI/B9AIController.h"
+#include "BehaviorTree/BehaviorTree.h"
+#include "BehaviorTree/BlackboardComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 
 AB9Enemy::AB9Enemy()
@@ -25,6 +28,17 @@ AB9Enemy::AB9Enemy()
 
 	HealthBar = CreateDefaultSubobject<UWidgetComponent>("HealthBar");
 	HealthBar->SetupAttachment(GetRootComponent());
+}
+
+void AB9Enemy::PossessedBy(AController* NewController)
+{
+	Super::PossessedBy(NewController);
+
+	if (!HasAuthority()) return;
+	B9AIController = Cast<AB9AIController>(NewController);
+	
+	B9AIController->GetBlackboardComponent()->InitializeBlackboard(*BehaviorTree->BlackboardAsset);
+	B9AIController->RunBehaviorTree(BehaviorTree);
 }
 
 void AB9Enemy::BeginPlay()
