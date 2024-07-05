@@ -23,3 +23,4 @@ protected:
 	TObjectPtr<UBehaviorTreeComponent> BehaviorTreeComponent;
 	
 };
+	
