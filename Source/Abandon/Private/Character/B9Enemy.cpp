@@ -13,6 +13,7 @@
 #include "AI/B9AIController.h"
 #include "BehaviorTree/BehaviorTree.h"
 #include "BehaviorTree/BlackboardComponent.h"
+#include "AI/B9AIController.h"
 #include "GameFramework/CharacterMovementComponent.h"
 
 AB9Enemy::AB9Enemy()
