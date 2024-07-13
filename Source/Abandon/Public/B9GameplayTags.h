@@ -58,6 +58,8 @@ public:
 	
 	FGameplayTag Effect_Ability_HitReact;
 	
+	FGameplayTag Abilities_Attack;
+	
 protected:
 
 private:

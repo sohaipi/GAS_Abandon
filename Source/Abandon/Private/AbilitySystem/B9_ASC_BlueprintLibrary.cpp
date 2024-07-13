@@ -9,6 +9,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "Player/B9PlayerState.h"
 #include "AbilitySystem/Data/B9CharacterClassInfo.h"
+#include "Interaction/CombatInterface.h"
 #include "UI/HUD/B9HUD.h"
 #include "UI/WidgetController/B9WidgetController.h"
 
@@ -67,13 +68,25 @@ void UB9_ASC_BlueprintLibrary::InitializeDefaultAttributes(const UObject* WorldC
 	ASC->ApplyGameplayEffectSpecToSelf(*VitalOutgoingSpec.Data.Get());
 }
 
-void UB9_ASC_BlueprintLibrary::GiveStartupAbilities(const UObject* WorldContextObject, UAbilitySystemComponent* ASC)
+void UB9_ASC_BlueprintLibrary::GiveStartupAbilities(const UObject* WorldContextObject, UAbilitySystemComponent* ASC,ECharacterClass CharacterClass)
 {
 	UB9CharacterClassInfo* CharacterClassInfo = GetCharacterClassInfo(WorldContextObject);
+	if (CharacterClassInfo == nullptr) return;
 	for (TSubclassOf<UGameplayAbility> AbilityClass : CharacterClassInfo->CommonAbilities)
 	{
 		FGameplayAbilitySpec AbilitySpec = FGameplayAbilitySpec(AbilityClass,1);
 		ASC->GiveAbility(AbilitySpec);
+	}
+	const FCharacterClassDefaultInfo& EnemyClassDefaultInfo = CharacterClassInfo->FindCharacterClassDefaultInfo(CharacterClass);
+	for (TSubclassOf<UGameplayAbility> Ability:EnemyClassDefaultInfo.StartUpAbilities)
+	{
+		
+		if (ICombatInterface* CombatInterface = Cast<ICombatInterface>(ASC->GetAvatarActor()))
+		{
+			FGameplayAbilitySpec AbilitySpec = FGameplayAbilitySpec(Ability,CombatInterface->GetPlayerLevel());
+			ASC->GiveAbility(AbilitySpec);	
+		}
+		
 	}
 }
 

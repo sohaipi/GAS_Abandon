@@ -60,7 +60,7 @@ void AB9Enemy::BeginPlay()
 	if (HasAuthority()) { InitAbilityActorInfo(); }
 	
 	GetCharacterMovement()->MaxWalkSpeed = BaseWalkSpeed;
-	UB9_ASC_BlueprintLibrary::GiveStartupAbilities(this,AbilitySystemComponent);
+	UB9_ASC_BlueprintLibrary::GiveStartupAbilities(this,AbilitySystemComponent,CharacterClass);
 
 	if (UB9UserWidget* UserWidget = Cast<UB9UserWidget>(HealthBar->GetUserWidgetObject()))
 	{
