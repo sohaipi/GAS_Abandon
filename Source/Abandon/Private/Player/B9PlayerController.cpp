@@ -141,8 +141,11 @@ void AB9PlayerController::AbilityInputTagReleased(FGameplayTag InputTag)
 					Spline->AddSplinePoint(PointLoc,ESplineCoordinateSpace::World);
 					DrawDebugSphere(GetWorld(),PointLoc,20.f,8,FColor::Blue,false,50.f);
 				}
-				CachedDestination = Path->PathPoints[Path->PathPoints.Num()-1];
-				bAutoRunning = true;
+				if (Path->PathPoints.Num() > 0)
+				{
+					CachedDestination = Path->PathPoints[Path->PathPoints.Num()-1];
+                    				bAutoRunning = true;
+				}
 			}
 		}
 		bTargeting = false;

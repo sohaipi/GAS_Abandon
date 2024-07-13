@@ -50,6 +50,11 @@ protected:
 	UFUNCTION(BlueprintCallable)
 	void OnEndOverlap(AActor* TargetActor);
 
+	UPROPERTY(BlueprintReadOnly,EditAnywhere,Category = "Effects")
+	bool bDestroyOnEffectApplication = false;
+	UPROPERTY(BlueprintReadOnly,EditAnywhere,Category = "Effects")
+	bool bApplyEffectToEnemy = false;
+
 	
 	//句柄与ASC的对应，用于存储需要移除的Effect
 	TMap<FActiveGameplayEffectHandle,UAbilitySystemComponent*> ActiveEffectHandles;

@@ -25,6 +25,11 @@ AB9Enemy::AB9Enemy()
 	//Gameplay Effects are not replicated.Gameplay Cues and Gameplay Tags replicated to all clients.
 	AbilitySystemComponent->SetReplicationMode(EGameplayEffectReplicationMode::Minimal);
 
+	bUseControllerRotationPitch = false;
+	bUseControllerRotationRoll = false;
+	bUseControllerRotationYaw = false;
+	GetCharacterMovement()->bUseControllerDesiredRotation = true;
+
 	AttributeSet = CreateDefaultSubobject<UB9AttributeSet>("AttributeSet");
 
 	HealthBar = CreateDefaultSubobject<UWidgetComponent>("HealthBar");
@@ -40,6 +45,10 @@ void AB9Enemy::PossessedBy(AController* NewController)
 	
 	B9AIController->GetBlackboardComponent()->InitializeBlackboard(*BehaviorTree->BlackboardAsset);
 	B9AIController->RunBehaviorTree(BehaviorTree);
+	B9AIController->GetBlackboardComponent()->SetValueAsBool(FName("HitReacting"),false);
+
+	B9AIController->GetBlackboardComponent()->SetValueAsBool(FName("RangedAttacker"),CharacterClass != ECharacterClass::Warrior);
+
 }
 
 void AB9Enemy::BeginPlay()
@@ -109,6 +118,7 @@ void AB9Enemy::HitReactOnDamage(const FGameplayTag Tag, int32 TagCount)
 {
 	bHitReacting = TagCount > 0;
 	GetCharacterMovement()->MaxWalkSpeed = bHitReacting ? 0.f : BaseWalkSpeed;
+	B9AIController->GetBlackboardComponent()->SetValueAsBool(FName("HitReacting"),bHitReacting );
 }
 
 void AB9Enemy::InitAbilityActorInfo()

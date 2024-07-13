@@ -61,6 +61,8 @@ void AB9EffectActor::BeginPlay()
 //一并封装对effect的应用与移除的预处理
 void AB9EffectActor::ApplyEffectToTarget(AActor* TargetActor, TSubclassOf<UGameplayEffect> GameplayEffectClass)
 {
+	if (TargetActor->ActorHasTag(FName("Enemy")) && !bApplyEffectToEnemy) return;
+	
 	//需实现接口的声明版本
 	/*IAbilitySystemInterface* ASCInterface = Cast<IAbilitySystemInterface>(Target);
 	if (ASCInterface)
@@ -88,10 +90,17 @@ void AB9EffectActor::ApplyEffectToTarget(AActor* TargetActor, TSubclassOf<UGamep
 	{
 		ActiveEffectHandles.Add(ActiveEffectHandle,TargetASC);
 	}
+
+	if (bDestroyOnEffectApplication && EffectSpecHandle.Data.Get()->Def.Get()->DurationPolicy == EGameplayEffectDurationType::Instant)
+	{
+		Destroy();
+	}
 }
 
 void AB9EffectActor::OnOverlap(AActor* TargetActor)
 {
+	if (TargetActor->ActorHasTag(FName("Enemy")) && !bApplyEffectToEnemy) return;
+	
 	if (InstantEffectApplicationPolicy == EEffectApplicationPolicy::ApplyOnOverlap)
 	{
 		ApplyEffectToTarget(TargetActor,InstantGameplayEffectClass);
@@ -108,6 +117,8 @@ void AB9EffectActor::OnOverlap(AActor* TargetActor)
 
 void AB9EffectActor::OnEndOverlap(AActor* TargetActor)
 {
+	if (TargetActor->ActorHasTag(FName("Enemy")) && !bApplyEffectToEnemy) return;
+	
 	if (InstantEffectApplicationPolicy == EEffectApplicationPolicy::ApplyOnEndOverlap)
 	{
 		ApplyEffectToTarget(TargetActor,InstantGameplayEffectClass);
