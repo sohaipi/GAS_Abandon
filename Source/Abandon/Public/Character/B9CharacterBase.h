@@ -27,7 +27,14 @@ public:
 	
 	UAttributeSet* GetAttributeSet() const{return AttributeSet;}
 
+	/* 战斗接口 */
+	//只在服务器处理一些内容；
+	virtual void Die() override;
 	virtual UAnimMontage* GetHitReactMontage_Implementation() override;
+	virtual FVector GetCombatTipLocation_Implementation() override;
+	virtual bool IsDead_Implementation() const override;
+	virtual AActor* GetAvatar_Implementation() override;
+	/* 战斗接口 */
 protected:
 	virtual void BeginPlay() override;
 
@@ -36,7 +43,8 @@ protected:
 
 	UPROPERTY(EditAnywhere, Category = "Combat")
 	FName WeaponTipSocketName;
-	virtual FVector GetCombatTipLocation() override;
+	
+	bool bDead = false;
 	
 	UPROPERTY()
 	TObjectPtr<UAbilitySystemComponent> AbilitySystemComponent;
@@ -56,10 +64,7 @@ protected:
 	void ApplyEffectToTarget(TSubclassOf<UGameplayEffect> DefaultAttributes, float Level) const;
 
 	void AddCharacterAbilities();
-
-	//只在服务器处理一些内容；
-	virtual void Die() override;
- 
+	
 	//死亡具体行为需要同步;
 	UFUNCTION(NetMulticast,Reliable)
 	virtual void MulticastHandleDeath();

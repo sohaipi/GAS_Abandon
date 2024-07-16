@@ -121,6 +121,16 @@ void AB9Enemy::HitReactOnDamage(const FGameplayTag Tag, int32 TagCount)
 	B9AIController->GetBlackboardComponent()->SetValueAsBool(FName("HitReacting"),bHitReacting );
 }
 
+void AB9Enemy::SetCombatTarget_Implementation(AActor* InCombatTarget)
+{
+	CombatTarget = InCombatTarget;
+}
+
+AActor* AB9Enemy::GetCombatTarget_Implementation() const
+{
+	return CombatTarget;
+}
+
 void AB9Enemy::InitAbilityActorInfo()
 {
 	AbilitySystemComponent->InitAbilityActorInfo(this,this);

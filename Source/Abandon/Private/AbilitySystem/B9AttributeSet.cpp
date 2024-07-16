@@ -182,6 +182,11 @@ void UB9AttributeSet::ShowFloatingText(const FEffectSourceProperties& Props, flo
 		/*if (AB9PlayerController* PC = Cast<AB9PlayerController>(UGameplayStatics::GetPlayerController(Props.SourceCharacter,0)) )*/
 		{
 			PC->ShowDamageNumber(Damage,Props.TargetCharacter,bBlockedHit,bCriticalHit);
+			return;
+		}
+		if(AB9PlayerController* PC = Cast<AB9PlayerController>(Props.TargetCharacter->Controller))
+		{
+			PC->ShowDamageNumber(Damage,Props.TargetCharacter,bBlockedHit,bCriticalHit);
 		}
 	}
 }

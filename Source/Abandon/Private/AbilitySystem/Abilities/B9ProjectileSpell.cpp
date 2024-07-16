@@ -24,33 +24,30 @@ void UB9ProjectileSpell::SpawnProjectile(const FVector& ProjectileTargetLocation
 	/*查问题，可删const bool bIsServer = GetOwningActorFromActorInfo()->HasAuthority();*/
 	if (!bIsServer) return;
 	
-	if (ICombatInterface* CombatInterface = Cast<ICombatInterface>(GetAvatarActorFromActorInfo()))
-	{
-		const FVector SocketLocation = CombatInterface->GetCombatTipLocation();
-		FRotator Rotation = (ProjectileTargetLocation - SocketLocation).Rotation();
-		/*Rotation.Pitch = 0.f;*/
-		FTransform SpawnTransform;
-		SpawnTransform.SetLocation(SocketLocation);
-		SpawnTransform.SetRotation(Rotation.Quaternion());
+	const FVector SocketLocation = ICombatInterface::Execute_GetCombatTipLocation(this);
+	FRotator Rotation = (ProjectileTargetLocation - SocketLocation).Rotation();
+	/*Rotation.Pitch = 0.f;*/
+	FTransform SpawnTransform;
+	SpawnTransform.SetLocation(SocketLocation);
+	SpawnTransform.SetRotation(Rotation.Quaternion());
 		
-		AB9Projectile* ProjectileSpawn = GetWorld()->SpawnActorDeferred<AB9Projectile>(ProjectileClass,SpawnTransform,GetOwningActorFromActorInfo(),
-			Cast<APawn>(GetOwningActorFromActorInfo()),ESpawnActorCollisionHandlingMethod::AlwaysSpawn);
+	AB9Projectile* ProjectileSpawn = GetWorld()->SpawnActorDeferred<AB9Projectile>(ProjectileClass,SpawnTransform,GetOwningActorFromActorInfo(),
+		Cast<APawn>(GetOwningActorFromActorInfo()),ESpawnActorCollisionHandlingMethod::AlwaysSpawn);
 
-		const UAbilitySystemComponent* SourceAsc = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(GetAvatarActorFromActorInfo());
-		const FGameplayEffectSpecHandle SpecHandle = SourceAsc->MakeOutgoingSpec(DamageEffectClass,GetAbilityLevel(),SourceAsc->MakeEffectContext());
+	const UAbilitySystemComponent* SourceAsc = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(GetAvatarActorFromActorInfo());
+	const FGameplayEffectSpecHandle SpecHandle = SourceAsc->MakeOutgoingSpec(DamageEffectClass,GetAbilityLevel(),SourceAsc->MakeEffectContext());
 
-		const FB9GameplayTags GameplayTags = FB9GameplayTags::Get();
-		//TODO 将数值用技能等级拆分 
-		//根据tag查找 magnitude;
-		for (auto& Pair:DamageTypes)
-		{ 
-			const float ScaledDamage = Pair.Value.GetValueAtLevel(GetAbilityLevel());
-			UAbilitySystemBlueprintLibrary::AssignTagSetByCallerMagnitude(SpecHandle,Pair.Key,ScaledDamage);
-		}
-		
-		
-		ProjectileSpawn->DamageEffectSpecHandle = SpecHandle;
-		
-		ProjectileSpawn->FinishSpawning(SpawnTransform);
+	const FB9GameplayTags GameplayTags = FB9GameplayTags::Get();
+	//TODO 将数值用技能等级拆分 
+	//根据tag查找 magnitude;
+	for (auto& Pair:DamageTypes)
+	{ 
+		const float ScaledDamage = Pair.Value.GetValueAtLevel(GetAbilityLevel());
+		UAbilitySystemBlueprintLibrary::AssignTagSetByCallerMagnitude(SpecHandle,Pair.Key,ScaledDamage);
 	}
+		
+		
+	ProjectileSpawn->DamageEffectSpecHandle = SpecHandle;
+		
+	ProjectileSpawn->FinishSpawning(SpawnTransform);
 }

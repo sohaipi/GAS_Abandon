@@ -132,3 +132,26 @@ void UB9_ASC_BlueprintLibrary::SetIsCriticalHit(FGameplayEffectContextHandle& Ef
 		B9EffectContext->SetIsCriticalHit(bInIsCriticalHit);
 	}
 }
+
+void UB9_ASC_BlueprintLibrary::GetLivePlayersWithinRadius(const UObject* WorldContext,
+	TArray<AActor*>& OutOverlappingActors, const TArray<AActor*>& ActorsToIgnore, float Radius,
+	const FVector& SphereOrigin)
+{
+	FCollisionQueryParams SphereParams;
+
+	SphereParams.AddIgnoredActors(ActorsToIgnore);
+	
+	TArray<FOverlapResult> Overlaps;
+	if (UWorld* World = GEngine->GetWorldFromContextObject(WorldContext, EGetWorldErrorMode::LogAndReturnNull))
+	{
+		World->OverlapMultiByObjectType(Overlaps, SphereOrigin, FQuat::Identity, FCollisionObjectQueryParams(FCollisionObjectQueryParams::InitType::AllDynamicObjects), FCollisionShape::MakeSphere(Radius), SphereParams);
+		for (FOverlapResult& overlap:Overlaps)
+		{
+			const bool ImplementsCombatInterface = overlap.GetActor()->Implements<UCombatInterface>();
+			if (ImplementsCombatInterface && !ICombatInterface::Execute_IsDead(overlap.GetActor()))
+			{
+				OutOverlappingActors.AddUnique(ICombatInterface::Execute_GetAvatar(overlap.GetActor()));
+			}
+		}
+	}
+}

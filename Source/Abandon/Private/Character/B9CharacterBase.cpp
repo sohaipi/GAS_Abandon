@@ -38,7 +38,7 @@ void AB9CharacterBase::BeginPlay()
 	
 }
 
-FVector AB9CharacterBase::GetCombatTipLocation()
+FVector AB9CharacterBase::GetCombatTipLocation_Implementation()
 {
 	check(Weapon);
 	return Weapon->GetSocketLocation(WeaponTipSocketName);
@@ -82,6 +82,16 @@ void AB9CharacterBase::Die()
 	MulticastHandleDeath();
 }
 
+bool AB9CharacterBase::IsDead_Implementation() const
+{
+	return bDead;
+}
+
+AActor* AB9CharacterBase::GetAvatar_Implementation()
+{
+	return this;
+}
+
 void AB9CharacterBase::MulticastHandleDeath_Implementation()
 {
 	Weapon->SetSimulatePhysics(true);
@@ -95,6 +105,7 @@ void AB9CharacterBase::MulticastHandleDeath_Implementation()
 
 	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	Dissolve();
+	bDead = true;
 }
 
 

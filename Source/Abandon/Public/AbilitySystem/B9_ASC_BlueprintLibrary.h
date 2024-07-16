@@ -41,4 +41,7 @@ public:
 	static void SetIsBlockedHit(UPARAM(ref) FGameplayEffectContextHandle& EffectContextHandle,bool bInIsBlockedHit);
 	UFUNCTION(BlueprintCallable,Category = "B9_ASC_BlueprintLibrary|GameplayEffects")
 	static void SetIsCriticalHit(UPARAM(ref) FGameplayEffectContextHandle& EffectContextHandle,bool bInIsCriticalHit);
+
+	UFUNCTION(BlueprintCallable,Category = "B9_ASC_BlueprintLibrary|GameplayMechanics")
+	static void GetLivePlayersWithinRadius(const UObject* WorldContext, TArray<AActor*>& OutOverlappingActors,const TArray<AActor*>& ActorsToIgnore,float Radius,const FVector& SphereOrigin);
 };

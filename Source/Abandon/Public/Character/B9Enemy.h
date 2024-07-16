@@ -45,6 +45,12 @@ public:
 	bool bHitReacting = false;
 	UFUNCTION()
 	void HitReactOnDamage(const FGameplayTag Tag,int32 TagCount);
+
+	UPROPERTY(BlueprintReadWrite,Category = "Combat")
+	TObjectPtr<AActor> CombatTarget;
+
+	void SetCombatTarget_Implementation(AActor* InCombatTarget) override;
+	AActor* GetCombatTarget_Implementation() const override;
 	
 protected:
 	virtual void InitAbilityActorInfo() override;

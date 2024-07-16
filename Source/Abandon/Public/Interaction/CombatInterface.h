@@ -23,7 +23,9 @@ class ABANDON_API ICombatInterface
 	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
 	virtual int32 GetPlayerLevel();
-	virtual FVector GetCombatTipLocation();
+
+	UFUNCTION(BlueprintNativeEvent,BlueprintCallable)
+	FVector GetCombatTipLocation();
 
 	UFUNCTION(BlueprintImplementableEvent,BlueprintCallable)
 	void UpdateWarpingTarget(const FVector& Target);
@@ -32,5 +34,16 @@ public:
 	UFUNCTION(BlueprintNativeEvent,BlueprintCallable)
 	UAnimMontage* GetHitReactMontage();
 
+	UFUNCTION(BlueprintNativeEvent,BlueprintCallable)
+	void SetCombatTarget(AActor* InCombatTarget);
+	UFUNCTION(BlueprintNativeEvent,BlueprintCallable)
+	AActor* GetCombatTarget() const;
+	
 	virtual void Die() = 0;
+	UFUNCTION(BlueprintNativeEvent,BlueprintCallable)
+	bool IsDead() const;
+	UFUNCTION(BlueprintNativeEvent,BlueprintCallable)
+	AActor* GetAvatar() ;
+
+	
 };
