@@ -9,6 +9,7 @@
 #include "NiagaraFunctionLibrary.h"
 #include "Kismet/GameplayStatics.h"
 #include "Abandon/Abandon.h"
+#include "AbilitySystem/B9_ASC_BlueprintLibrary.h"
 #include "Components/AudioComponent.h"
 
 AB9Projectile::AB9Projectile()
@@ -26,8 +27,8 @@ AB9Projectile::AB9Projectile()
 	Sphere->SetCollisionResponseToChannel(ECC_Pawn,ECR_Overlap);
 	
 	ProjectileMovementComp = CreateDefaultSubobject<UProjectileMovementComponent>("ProjectileMovementComp");
-	ProjectileMovementComp->InitialSpeed = 2000.F;
-	ProjectileMovementComp->MaxSpeed = 2000.F;
+	ProjectileMovementComp->InitialSpeed = 1000.F;
+	ProjectileMovementComp->MaxSpeed = 1000.F;
 	ProjectileMovementComp->ProjectileGravityScale = 0.F;
 }
 void AB9Projectile::BeginPlay()
@@ -56,6 +57,10 @@ void AB9Projectile::OnSphereOverlap(UPrimitiveComponent* OverlappedComponent, AA
                                     UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	if (DamageEffectSpecHandle.Data.IsValid() && DamageEffectSpecHandle.Data.Get()->GetContext().GetEffectCauser() == OtherActor)
+	{
+		return;
+	}
+	if (!UB9_ASC_BlueprintLibrary::IsNotFriends(DamageEffectSpecHandle.Data.Get()->GetContext().GetEffectCauser(),OtherActor))
 	{
 		return;
 	}

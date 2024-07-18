@@ -118,7 +118,10 @@ void AB9Enemy::HitReactOnDamage(const FGameplayTag Tag, int32 TagCount)
 {
 	bHitReacting = TagCount > 0;
 	GetCharacterMovement()->MaxWalkSpeed = bHitReacting ? 0.f : BaseWalkSpeed;
-	B9AIController->GetBlackboardComponent()->SetValueAsBool(FName("HitReacting"),bHitReacting );
+	if (B9AIController && B9AIController->GetBlackboardComponent())
+	{
+		B9AIController->GetBlackboardComponent()->SetValueAsBool(FName("HitReacting"),bHitReacting );
+	}
 }
 
 void AB9Enemy::SetCombatTarget_Implementation(AActor* InCombatTarget)

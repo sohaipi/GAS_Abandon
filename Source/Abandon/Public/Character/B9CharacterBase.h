@@ -31,10 +31,14 @@ public:
 	//只在服务器处理一些内容；
 	virtual void Die() override;
 	virtual UAnimMontage* GetHitReactMontage_Implementation() override;
-	virtual FVector GetCombatTipLocation_Implementation() override;
+	virtual FVector GetCombatTipLocation_Implementation(const FGameplayTag& GameplayTag) override;
 	virtual bool IsDead_Implementation() const override;
 	virtual AActor* GetAvatar_Implementation() override;
+	virtual TArray<FTaggedMontage> GetAttackMontages_Implementation() override;
 	/* 战斗接口 */
+
+	UPROPERTY(EditAnywhere,Category = "Combat")
+	TArray<FTaggedMontage> AttackMontages;
 protected:
 	virtual void BeginPlay() override;
 
@@ -43,6 +47,10 @@ protected:
 
 	UPROPERTY(EditAnywhere, Category = "Combat")
 	FName WeaponTipSocketName;
+	UPROPERTY(EditAnywhere, Category = "Combat")
+	FName LeftHandSocketName;
+	UPROPERTY(EditAnywhere, Category = "Combat")
+	FName RightHandSocketName;
 	
 	bool bDead = false;
 	

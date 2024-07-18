@@ -87,6 +87,16 @@ void FB9GameplayTags::InitializeNativeGameplayTags()
 	B9GameplayTags.Damage_Physical = UGameplayTagsManager::Get().AddNativeGameplayTag(
 	FName("Damage.Physical"),FString("Physical Damage Type"));
 
+	/* 
+	 * 攻击用武器类型标签;
+	 */
+	B9GameplayTags.Montage_Attack_Weapon = UGameplayTagsManager::Get().AddNativeGameplayTag(
+	FName("Montage.Attack.Weapon"),FString("Montage.Attack.Weapon"));
+	B9GameplayTags.Montage_Attack_LeftHand = UGameplayTagsManager::Get().AddNativeGameplayTag(
+	FName("Montage.Attack.LeftHand"),FString("Montage.Attack.LeftHand"));
+	B9GameplayTags.Montage_Attack_RightHand = UGameplayTagsManager::Get().AddNativeGameplayTag(
+	FName("Montage.Attack.RightHand"),FString("Montage.Attack.RightHand"));
+
 	/*
 	 *元素抗性与元素伤害的对照关系；
 	 */
@@ -100,4 +110,6 @@ void FB9GameplayTags::InitializeNativeGameplayTags()
 
 	B9GameplayTags.Abilities_Attack = UGameplayTagsManager::Get().AddNativeGameplayTag(
 	FName("Abilities.Attack"),FString("AbilityAttack Tag"));
+
+	
 }

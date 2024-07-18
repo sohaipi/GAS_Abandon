@@ -24,7 +24,8 @@ void UB9ProjectileSpell::SpawnProjectile(const FVector& ProjectileTargetLocation
 	/*查问题，可删const bool bIsServer = GetOwningActorFromActorInfo()->HasAuthority();*/
 	if (!bIsServer) return;
 	
-	const FVector SocketLocation = ICombatInterface::Execute_GetCombatTipLocation(this);
+	const FVector SocketLocation = ICombatInterface::Execute_GetCombatTipLocation(
+		GetAvatarActorFromActorInfo(),FB9GameplayTags::Get().Montage_Attack_Weapon);
 	FRotator Rotation = (ProjectileTargetLocation - SocketLocation).Rotation();
 	/*Rotation.Pitch = 0.f;*/
 	FTransform SpawnTransform;

@@ -20,7 +20,7 @@ class ABANDON_API AB9Projectile : public AActor
 	
 public:	
 	AB9Projectile();
-	UPROPERTY()
+	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<UProjectileMovementComponent> ProjectileMovementComp;
 
 	//meta 的内容用于暴露引脚；
@@ -39,7 +39,7 @@ protected:
 private:
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<USphereComponent> Sphere;
-
+	
 	UPROPERTY(EditAnywhere)
 	TObjectPtr<UNiagaraSystem> ImpactEffect;
 	UPROPERTY(EditAnywhere)

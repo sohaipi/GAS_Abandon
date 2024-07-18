@@ -4,6 +4,7 @@
 #include "Character/B9CharacterBase.h"
 
 #include "AbilitySystemComponent.h"
+#include "B9GameplayTags.h"
 #include "Abandon/Abandon.h"
 #include "AbilitySystem/B9AbilitySystemComponent.h"
 #include "Components/CapsuleComponent.h"
@@ -38,10 +39,22 @@ void AB9CharacterBase::BeginPlay()
 	
 }
 
-FVector AB9CharacterBase::GetCombatTipLocation_Implementation()
+FVector AB9CharacterBase::GetCombatTipLocation_Implementation(const FGameplayTag& GameplayTag)
 {
-	check(Weapon);
-	return Weapon->GetSocketLocation(WeaponTipSocketName);
+	const FB9GameplayTags& GameplayTags = FB9GameplayTags::Get();
+	if (GameplayTag.MatchesTagExact(GameplayTags.Montage_Attack_Weapon))
+	{
+		return Weapon->GetSocketLocation(WeaponTipSocketName);
+	}
+	if (GameplayTag.MatchesTagExact(GameplayTags.Montage_Attack_RightHand))
+	{
+		return GetMesh()->GetSocketLocation(RightHandSocketName);
+	}
+	if (GameplayTag.MatchesTagExact(GameplayTags.Montage_Attack_LeftHand))
+	{
+		return GetMesh()->GetSocketLocation(LeftHandSocketName);
+	}
+	return FVector();
 }
 
 void AB9CharacterBase::InitAbilityActorInfo()
@@ -90,6 +103,11 @@ bool AB9CharacterBase::IsDead_Implementation() const
 AActor* AB9CharacterBase::GetAvatar_Implementation()
 {
 	return this;
+}
+
+TArray<FTaggedMontage> AB9CharacterBase::GetAttackMontages_Implementation()
+{
+	return AttackMontages;
 }
 
 void AB9CharacterBase::MulticastHandleDeath_Implementation()

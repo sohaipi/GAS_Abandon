@@ -44,4 +44,7 @@ public:
 
 	UFUNCTION(BlueprintCallable,Category = "B9_ASC_BlueprintLibrary|GameplayMechanics")
 	static void GetLivePlayersWithinRadius(const UObject* WorldContext, TArray<AActor*>& OutOverlappingActors,const TArray<AActor*>& ActorsToIgnore,float Radius,const FVector& SphereOrigin);
+
+	UFUNCTION(BlueprintCallable,Category = "B9_ASC_BlueprintLibrary|GameplayMechanics")
+	static bool IsNotFriends(AActor* FirstActor, AActor* SecondActor);
 };

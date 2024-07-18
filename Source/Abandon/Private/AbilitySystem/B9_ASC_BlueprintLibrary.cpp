@@ -155,3 +155,16 @@ void UB9_ASC_BlueprintLibrary::GetLivePlayersWithinRadius(const UObject* WorldCo
 		}
 	}
 }
+
+bool UB9_ASC_BlueprintLibrary::IsNotFriends(AActor* FirstActor, AActor* SecondActor)
+{
+	const bool bFirstIsPlayer = FirstActor->ActorHasTag(FName("Player"));
+	const bool bSecondIsPlayer = SecondActor->ActorHasTag(FName("Player"));
+	const bool bFirstIsEnemy = FirstActor->ActorHasTag(FName("Enemy"));
+	const bool bSecondIsEnemy = SecondActor->ActorHasTag(FName("Enemy"));
+
+	const bool bIsBothPlayer = bFirstIsPlayer && bSecondIsPlayer;
+	const bool bIsBothEnemy = bFirstIsEnemy && bSecondIsEnemy;
+	const bool bFriends = bIsBothPlayer || bIsBothEnemy;
+	return !bFriends;
+}
