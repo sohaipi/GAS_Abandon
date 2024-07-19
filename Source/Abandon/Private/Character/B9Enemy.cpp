@@ -111,6 +111,8 @@ int32 AB9Enemy::GetPlayerLevel()
 void AB9Enemy::Die()
 {
 	SetLifeSpan(LifeSpan);
+	if (B9AIController)B9AIController->GetBlackboardComponent()->SetValueAsBool(FName("IsDead"),true);
+	
 	Super::Die();
 }
 

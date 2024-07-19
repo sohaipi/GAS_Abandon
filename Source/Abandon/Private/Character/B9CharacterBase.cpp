@@ -110,6 +110,11 @@ TArray<FTaggedMontage> AB9CharacterBase::GetAttackMontages_Implementation()
 	return AttackMontages;
 }
 
+UNiagaraSystem* AB9CharacterBase::GetBloodEffect_Implementation()
+{
+	return BloodEffect;
+}
+
 void AB9CharacterBase::MulticastHandleDeath_Implementation()
 {
 	Weapon->SetSimulatePhysics(true);

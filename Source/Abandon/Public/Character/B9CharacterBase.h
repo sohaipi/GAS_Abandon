@@ -8,6 +8,7 @@
 #include "Interaction/CombatInterface.h"
 #include "B9CharacterBase.generated.h"
 
+class UNiagaraSystem;
 class UAnimMontage;
 class UGameplayAbility;
 class UGameplayEffect;
@@ -35,6 +36,7 @@ public:
 	virtual bool IsDead_Implementation() const override;
 	virtual AActor* GetAvatar_Implementation() override;
 	virtual TArray<FTaggedMontage> GetAttackMontages_Implementation() override;
+	virtual UNiagaraSystem* GetBloodEffect_Implementation() override;
 	/* 战斗接口 */
 
 	UPROPERTY(EditAnywhere,Category = "Combat")
@@ -42,7 +44,7 @@ public:
 protected:
 	virtual void BeginPlay() override;
 
-	UPROPERTY(EditAnywhere, Category = "Combat" )
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Combat" )
 	TObjectPtr<USkeletalMeshComponent> Weapon;
 
 	UPROPERTY(EditAnywhere, Category = "Combat")
@@ -88,6 +90,9 @@ protected:
 	TObjectPtr<UMaterialInstance> DissolveMaterialInstance;
 	UPROPERTY(EditAnywhere,BlueprintReadOnly)
 	TObjectPtr<UMaterialInstance> WeaponDissolveMaterialInstance;
+
+	UPROPERTY(EditAnywhere,BlueprintReadOnly)
+	UNiagaraSystem* BloodEffect;
 private:
 	UPROPERTY(EditAnywhere,Category = "Abilities")
 	TArray<TSubclassOf<UGameplayAbility>> StartupAbilities;
