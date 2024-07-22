@@ -90,13 +90,28 @@ void FB9GameplayTags::InitializeNativeGameplayTags()
 	/* 
 	 * 攻击用武器类型标签;
 	 */
-	B9GameplayTags.Montage_Attack_Weapon = UGameplayTagsManager::Get().AddNativeGameplayTag(
-	FName("Montage.Attack.Weapon"),FString("Montage.Attack.Weapon"));
-	B9GameplayTags.Montage_Attack_LeftHand = UGameplayTagsManager::Get().AddNativeGameplayTag(
-	FName("Montage.Attack.LeftHand"),FString("Montage.Attack.LeftHand"));
-	B9GameplayTags.Montage_Attack_RightHand = UGameplayTagsManager::Get().AddNativeGameplayTag(
-	FName("Montage.Attack.RightHand"),FString("Montage.Attack.RightHand"));
+	B9GameplayTags.CombatSocket_Weapon = UGameplayTagsManager::Get().AddNativeGameplayTag(
+	FName("CombatSocket.Weapon"),FString("CombatSocket.Weapon"));
+	B9GameplayTags.CombatSocket_LeftHand = UGameplayTagsManager::Get().AddNativeGameplayTag(
+	FName("CombatSocket.LeftHand"),FString("CombatSocket.LeftHand"));
+	B9GameplayTags.CombatSocket_RightHand = UGameplayTagsManager::Get().AddNativeGameplayTag(
+	FName("CombatSocket.RightHand"),FString("CombatSocket.RightHand"));
+	B9GameplayTags.CombatSocket_Others = UGameplayTagsManager::Get().AddNativeGameplayTag(
+	FName("CombatSocket.Others"),FString("CombatSocket.Others"));
 
+	/*
+	 * 蒙太奇区分标签
+	 */
+	B9GameplayTags.Montage_Attack_1 = UGameplayTagsManager::Get().AddNativeGameplayTag(
+	FName("Montage.Attack.1"),FString("Montage.Attack.1"));
+	B9GameplayTags.Montage_Attack_2 = UGameplayTagsManager::Get().AddNativeGameplayTag(
+	FName("Montage.Attack.2"),FString("Montage.Attack.2"));
+	B9GameplayTags.Montage_Attack_3 = UGameplayTagsManager::Get().AddNativeGameplayTag(
+	FName("Montage.Attack.3"),FString("Montage.Attack.3"));
+	B9GameplayTags.Montage_Attack_4 = UGameplayTagsManager::Get().AddNativeGameplayTag(
+	FName("Montage.Attack.4"),FString("Montage.Attack.4"));
+	
+	
 	/*
 	 *元素抗性与元素伤害的对照关系；
 	 */

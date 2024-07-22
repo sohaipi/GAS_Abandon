@@ -48,6 +48,7 @@ void AB9Projectile::Destroyed()
 		UGameplayStatics::PlaySoundAtLocation(this,ImpactSound,GetActorLocation(),FRotator::ZeroRotator);
 		UNiagaraFunctionLibrary::SpawnSystemAtLocation(this,ImpactEffect,GetActorLocation());
 		if (LoopingSoundComp) LoopingSoundComp->Stop();
+		bHit = true;
 	}
 	Super::Destroyed();
 	
@@ -69,6 +70,7 @@ void AB9Projectile::OnSphereOverlap(UPrimitiveComponent* OverlappedComponent, AA
 		if (LoopingSoundComp) LoopingSoundComp->Stop();
 		UGameplayStatics::PlaySoundAtLocation(this,ImpactSound,GetActorLocation(),FRotator::ZeroRotator);
 		UNiagaraFunctionLibrary::SpawnSystemAtLocation(this,ImpactEffect,GetActorLocation());
+		bHit = true;
 	}
 	if (HasAuthority())
 	{

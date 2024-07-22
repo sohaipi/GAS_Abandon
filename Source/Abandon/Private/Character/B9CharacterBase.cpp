@@ -8,6 +8,7 @@
 #include "Abandon/Abandon.h"
 #include "AbilitySystem/B9AbilitySystemComponent.h"
 #include "Components/CapsuleComponent.h"
+#include "Kismet/GameplayStatics.h"
 
 AB9CharacterBase::AB9CharacterBase()
 {
@@ -42,17 +43,21 @@ void AB9CharacterBase::BeginPlay()
 FVector AB9CharacterBase::GetCombatTipLocation_Implementation(const FGameplayTag& GameplayTag)
 {
 	const FB9GameplayTags& GameplayTags = FB9GameplayTags::Get();
-	if (GameplayTag.MatchesTagExact(GameplayTags.Montage_Attack_Weapon))
+	if (GameplayTag.MatchesTagExact(GameplayTags.CombatSocket_Weapon))
 	{
 		return Weapon->GetSocketLocation(WeaponTipSocketName);
 	}
-	if (GameplayTag.MatchesTagExact(GameplayTags.Montage_Attack_RightHand))
+	if (GameplayTag.MatchesTagExact(GameplayTags.CombatSocket_RightHand))
 	{
 		return GetMesh()->GetSocketLocation(RightHandSocketName);
 	}
-	if (GameplayTag.MatchesTagExact(GameplayTags.Montage_Attack_LeftHand))
+	if (GameplayTag.MatchesTagExact(GameplayTags.CombatSocket_LeftHand))
 	{
 		return GetMesh()->GetSocketLocation(LeftHandSocketName);
+	}
+	if (GameplayTag.MatchesTagExact(GameplayTags.CombatSocket_Others))
+	{
+		return GetMesh()->GetSocketLocation(OtherSocketName);
 	}
 	return FVector();
 }
@@ -115,8 +120,23 @@ UNiagaraSystem* AB9CharacterBase::GetBloodEffect_Implementation()
 	return BloodEffect;
 }
 
+FTaggedMontage AB9CharacterBase::GetTaggedMontageByTag_Implementation(const FGameplayTag& MontageTag)
+{
+	for (FTaggedMontage TaggedMontage: AttackMontages)
+	{
+		if (TaggedMontage.MontageTag == MontageTag)
+		{
+			return TaggedMontage;
+		}
+	}
+	return FTaggedMontage();
+}
+
 void AB9CharacterBase::MulticastHandleDeath_Implementation()
 {
+	UGameplayStatics::PlaySoundAtLocation(
+		this,DeadSound,GetActorLocation(),GetActorRotation());
+	
 	Weapon->SetSimulatePhysics(true);
 	Weapon->SetEnableGravity(true);
 	Weapon->SetCollisionEnabled(ECollisionEnabled::PhysicsOnly);

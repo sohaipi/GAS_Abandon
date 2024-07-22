@@ -18,14 +18,15 @@ void UB9ProjectileSpell::ActivateAbility(const FGameplayAbilitySpecHandle Handle
 	
 }
 
-void UB9ProjectileSpell::SpawnProjectile(const FVector& ProjectileTargetLocation)
+void UB9ProjectileSpell::SpawnProjectile(const FVector& ProjectileTargetLocation,const FGameplayTag& SocketTag)
 {
 	const bool bIsServer = GetAvatarActorFromActorInfo()->HasAuthority();
 	/*查问题，可删const bool bIsServer = GetOwningActorFromActorInfo()->HasAuthority();*/
 	if (!bIsServer) return;
+
 	
 	const FVector SocketLocation = ICombatInterface::Execute_GetCombatTipLocation(
-		GetAvatarActorFromActorInfo(),FB9GameplayTags::Get().Montage_Attack_Weapon);
+		GetAvatarActorFromActorInfo(),SocketTag);
 	FRotator Rotation = (ProjectileTargetLocation - SocketLocation).Rotation();
 	/*Rotation.Pitch = 0.f;*/
 	FTransform SpawnTransform;

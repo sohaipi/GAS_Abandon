@@ -37,6 +37,7 @@ public:
 	virtual AActor* GetAvatar_Implementation() override;
 	virtual TArray<FTaggedMontage> GetAttackMontages_Implementation() override;
 	virtual UNiagaraSystem* GetBloodEffect_Implementation() override;
+	virtual FTaggedMontage GetTaggedMontageByTag_Implementation(const FGameplayTag& MontageTag) override;
 	/* 战斗接口 */
 
 	UPROPERTY(EditAnywhere,Category = "Combat")
@@ -53,6 +54,11 @@ protected:
 	FName LeftHandSocketName;
 	UPROPERTY(EditAnywhere, Category = "Combat")
 	FName RightHandSocketName;
+	UPROPERTY(EditAnywhere, Category = "Combat")
+	FName OtherSocketName;
+
+	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category = "Combat")
+	UNiagaraSystem* BloodEffect;
 	
 	bool bDead = false;
 	
@@ -91,8 +97,10 @@ protected:
 	UPROPERTY(EditAnywhere,BlueprintReadOnly)
 	TObjectPtr<UMaterialInstance> WeaponDissolveMaterialInstance;
 
-	UPROPERTY(EditAnywhere,BlueprintReadOnly)
-	UNiagaraSystem* BloodEffect;
+	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category = "Combat")
+	USoundBase* DeadSound;
+
+
 private:
 	UPROPERTY(EditAnywhere,Category = "Abilities")
 	TArray<TSubclassOf<UGameplayAbility>> StartupAbilities;
