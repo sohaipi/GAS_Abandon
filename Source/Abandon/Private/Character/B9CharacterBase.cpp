@@ -132,6 +132,16 @@ FTaggedMontage AB9CharacterBase::GetTaggedMontageByTag_Implementation(const FGam
 	return FTaggedMontage();
 }
 
+int32 AB9CharacterBase::GetMinionCount_Implementation()
+{
+	return MinionCount;
+}
+
+void AB9CharacterBase::IncrementMinionCount_Implementation(int32 Amount)
+{
+	MinionCount += Amount;
+}
+
 void AB9CharacterBase::MulticastHandleDeath_Implementation()
 {
 	UGameplayStatics::PlaySoundAtLocation(

@@ -123,8 +123,11 @@ void FB9GameplayTags::InitializeNativeGameplayTags()
 	B9GameplayTags.Effect_Ability_HitReact = UGameplayTagsManager::Get().AddNativeGameplayTag(
 	FName("Effect.Ability.HitReact"),FString("Damage React"));
 
+	/*
+	 *技能类型标签,用于在Ability中识别
+	 */
 	B9GameplayTags.Abilities_Attack = UGameplayTagsManager::Get().AddNativeGameplayTag(
 	FName("Abilities.Attack"),FString("AbilityAttack Tag"));
-
-	
+	B9GameplayTags.Abilities_Summon = UGameplayTagsManager::Get().AddNativeGameplayTag(
+	FName("Abilities.Summon"),FString("AbilitySummon Tag"));
 }

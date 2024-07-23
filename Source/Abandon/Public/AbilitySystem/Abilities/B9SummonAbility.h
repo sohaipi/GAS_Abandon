@@ -32,4 +32,8 @@ public:
 
 	UPROPERTY(EditAnywhere,Category = "Summoning")
 	float SpawnSpread = 90.f;
+
+	UFUNCTION(BlueprintPure,Category = "Summoning")
+	TSubclassOf<APawn> GetRandomMinionClass();
+	
 };

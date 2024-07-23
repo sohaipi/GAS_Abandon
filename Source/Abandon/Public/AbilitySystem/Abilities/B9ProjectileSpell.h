@@ -25,6 +25,10 @@ protected:
 	
 	UPROPERTY(EditAnywhere,BlueprintReadOnly)
 	TSubclassOf<AB9Projectile> ProjectileClass;
+	UPROPERTY(EditAnywhere,BlueprintReadOnly)
+	bool  bOverridePitch = false;
+	UPROPERTY(EditAnywhere,BlueprintReadOnly)
+	float  ProjectilePitchOverride = 0.f;
 	
 	UFUNCTION(BlueprintCallable,Category = "Projectile")
 	void SpawnProjectile(const FVector& ProjectileTargetLocation, const FGameplayTag& SocketTag);

@@ -116,7 +116,7 @@ void UExecCalc_Damage::Execute_Implementation(const FGameplayEffectCustomExecuti
 
 		checkf(B9DamageStatics().TagsToCaptureDefs.Contains(ResistanceTag),TEXT("在伤害执行器的标签对照表中获取不到属性：[%s]"),*ResistanceTag.ToString());
 		const FGameplayEffectAttributeCaptureDefinition CaptureDefinition = DamageStatics().TagsToCaptureDefs[ResistanceTag];
-		float DamageTypeValue = GESpec.GetSetByCallerMagnitude(Pair.Key);
+		float DamageTypeValue = GESpec.GetSetByCallerMagnitude(Pair.Key,false);
 		
 		float Resistance = 0.f;
 		ExecutionParams.AttemptCalculateCapturedAttributeMagnitude(CaptureDefinition,EvaluateParameters,Resistance);

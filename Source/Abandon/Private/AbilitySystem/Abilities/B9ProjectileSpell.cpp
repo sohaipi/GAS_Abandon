@@ -29,13 +29,15 @@ void UB9ProjectileSpell::SpawnProjectile(const FVector& ProjectileTargetLocation
 		GetAvatarActorFromActorInfo(),SocketTag);
 	FRotator Rotation = (ProjectileTargetLocation - SocketLocation).Rotation();
 	/*Rotation.Pitch = 0.f;*/
+	if (bOverridePitch)	 Rotation.Pitch = ProjectilePitchOverride;
+	
 	FTransform SpawnTransform;
 	SpawnTransform.SetLocation(SocketLocation);
 	SpawnTransform.SetRotation(Rotation.Quaternion());
 		
 	AB9Projectile* ProjectileSpawn = GetWorld()->SpawnActorDeferred<AB9Projectile>(ProjectileClass,SpawnTransform,GetOwningActorFromActorInfo(),
 		Cast<APawn>(GetOwningActorFromActorInfo()),ESpawnActorCollisionHandlingMethod::AlwaysSpawn);
-
+	
 	const UAbilitySystemComponent* SourceAsc = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(GetAvatarActorFromActorInfo());
 	const FGameplayEffectSpecHandle SpecHandle = SourceAsc->MakeOutgoingSpec(DamageEffectClass,GetAbilityLevel(),SourceAsc->MakeEffectContext());
 
